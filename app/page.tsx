@@ -3,12 +3,15 @@
 import Link from "next/link";
 import { curriculum, totalDays, totalTasks } from "@/data/curriculum";
 import { useProgress } from "@/contexts/ProgressContext";
+import { calculateStreak, calculatePace } from "@/lib/stats";
 
 export default function Home() {
   const { progress } = useProgress();
 
   const completedCount = Object.keys(progress.completedTasks).length;
   const pct = Math.round((completedCount / totalTasks) * 100);
+  const streak = calculateStreak(progress.completedTasks);
+  const pace = calculatePace(progress, totalTasks);
 
   // Find the first incomplete day to suggest as "today"
   let nextWeek = curriculum[0];
@@ -83,9 +86,23 @@ export default function Home() {
             Haven&apos;t logged a task yet. Start with Day 1 below.
           </p>
         ) : (
-          <p className="text-ink/70">
-            {pct}% through the bootcamp. Pick up where you left off:
-          </p>
+          <div className="space-y-2">
+            <p className="text-ink/70">
+              {pct}% through the bootcamp. Pick up where you left off:
+            </p>
+            <div className="flex flex-wrap gap-4 pt-1">
+              {streak > 0 && (
+                <span className="font-mono text-xs text-terracotta">
+                  🔥 {streak}-day streak
+                </span>
+              )}
+              {pace && (
+                <span className="font-mono text-xs text-ink/50">
+                  ~{pace.tasksPerDay} tasks/day · finish in ~{pace.weeksLeft} week{pace.weeksLeft !== 1 ? "s" : ""}
+                </span>
+              )}
+            </div>
+          </div>
         )}
         <Link
           href={`/week/${nextWeek.week}#day-${nextDay.day}`}

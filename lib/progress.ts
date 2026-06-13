@@ -1,6 +1,7 @@
 export type Progress = {
   completedTasks: Record<string, string>; // taskId -> ISO date completed
   startDate?: string;
+  portfolioLinks?: Record<string, string>; // weekNum -> URL
   isOwner?: boolean;
 };
 
