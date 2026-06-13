@@ -1,0 +1,116 @@
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Source+Serif+4:wght@400;600&family=IBM+Plex+Mono:wght@400;500&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --color-paper: #FAF8F3;
+  --color-ink: #1A1A1A;
+  --color-card: #EFEAE0;
+  --color-forest: #2D5F4F;
+  --color-forest-light: #3F7C68;
+  --color-terracotta: #C75D3A;
+  --color-line: #DDD6C8;
+
+  --font-display: "Space Grotesk", sans-serif;
+  --font-body: "Source Serif 4", serif;
+  --font-mono: "IBM Plex Mono", monospace;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background-color: var(--color-paper);
+  color: var(--color-ink);
+  font-family: var(--font-body);
+  background-image:
+    repeating-linear-gradient(
+      transparent,
+      transparent 39px,
+      var(--color-line) 39px,
+      var(--color-line) 40px
+    );
+  background-attachment: local;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-display);
+}
+
+.font-display {
+  font-family: var(--font-display);
+}
+.font-body {
+  font-family: var(--font-body);
+}
+.font-mono {
+  font-family: var(--font-mono);
+}
+
+.notebook-margin {
+  position: relative;
+}
+.notebook-margin::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 1px;
+  background: var(--color-terracotta);
+  opacity: 0.35;
+}
+
+.stamp {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.08em;
+  color: var(--color-forest);
+  border: 1.5px solid var(--color-forest);
+  border-radius: 3px;
+  padding: 2px 8px;
+  transform: rotate(-2deg);
+  text-transform: uppercase;
+}
+
+@keyframes stamp-in {
+  0% {
+    opacity: 0;
+    transform: rotate(-2deg) scale(1.6);
+  }
+  60% {
+    opacity: 1;
+    transform: rotate(-2deg) scale(0.95);
+  }
+  100% {
+    opacity: 1;
+    transform: rotate(-2deg) scale(1);
+  }
+}
+
+.stamp-animate {
+  animation: stamp-in 0.25s ease-out;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .stamp-animate {
+    animation: none;
+  }
+}
+
+.sidebar-scroll::-webkit-scrollbar {
+  width: 6px;
+}
+.sidebar-scroll::-webkit-scrollbar-thumb {
+  background: var(--color-line);
+  border-radius: 3px;
+}
+
+a:focus-visible,
+button:focus-visible {
+  outline: 2px solid var(--color-forest);
+  outline-offset: 2px;
+}
