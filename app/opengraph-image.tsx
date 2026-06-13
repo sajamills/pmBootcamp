@@ -10,7 +10,7 @@ export default async function Image() {
   const progress = await getProgressFromKV();
   const completed = Object.keys(progress.completedTasks).length;
   const pct = Math.round((completed / totalTasks) * 100);
-  const barWidth = Math.round((pct / 100) * 640);
+  const barWidth = Math.round((pct / 100) * 620);
 
   return new ImageResponse(
     (
@@ -25,47 +25,38 @@ export default async function Image() {
           padding: "72px 80px",
         }}
       >
+        {/* Label */}
         <div
           style={{
+            display: "flex",
             color: "#C75D3A",
             fontSize: 16,
             letterSpacing: "0.2em",
             fontFamily: "monospace",
-            textTransform: "uppercase",
           }}
         >
-          PM Field Log · 10-Week Consumer / Growth Bootcamp
+          PM FIELD LOG · 10-WEEK CONSUMER / GROWTH BOOTCAMP
         </div>
 
-        <div>
-          <div
-            style={{
-              fontSize: 72,
-              fontWeight: "bold",
-              color: "#1A1A1A",
-              lineHeight: 1.05,
-              marginBottom: 32,
-            }}
-          >
-            10 weeks. 50 days.{"\n"}
-            <span style={{ color: "#2D5F4F" }}>One PM portfolio.</span>
+        {/* Headline + progress */}
+        <div style={{ display: "flex", flexDirection: "column", gap: 32 }}>
+          <div style={{ display: "flex", flexDirection: "column", gap: 4 }}>
+            <div style={{ display: "flex", fontSize: 72, fontWeight: "bold", color: "#1A1A1A", lineHeight: 1.05 }}>
+              10 weeks. 50 days.
+            </div>
+            <div style={{ display: "flex", fontSize: 72, fontWeight: "bold", color: "#2D5F4F", lineHeight: 1.05 }}>
+              One PM portfolio.
+            </div>
           </div>
 
-          <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
-            <div
-              style={{
-                display: "flex",
-                alignItems: "center",
-                gap: 20,
-              }}
-            >
+          <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+            <div style={{ display: "flex", alignItems: "center", gap: 20 }}>
               <div
                 style={{
                   background: "#DDD6C8",
                   borderRadius: 8,
                   height: 14,
-                  width: 640,
-                  overflow: "hidden",
+                  width: 620,
                   display: "flex",
                 }}
               >
@@ -74,11 +65,13 @@ export default async function Image() {
                     background: "#2D5F4F",
                     height: "100%",
                     width: barWidth,
+                    borderRadius: 8,
                   }}
                 />
               </div>
-              <span
+              <div
                 style={{
+                  display: "flex",
                   color: "#2D5F4F",
                   fontSize: 28,
                   fontWeight: "bold",
@@ -86,10 +79,11 @@ export default async function Image() {
                 }}
               >
                 {pct}%
-              </span>
+              </div>
             </div>
-            <span
+            <div
               style={{
+                display: "flex",
                 color: "#1A1A1A",
                 opacity: 0.45,
                 fontSize: 18,
@@ -97,14 +91,16 @@ export default async function Image() {
               }}
             >
               {completed} of {totalTasks} tasks logged
-            </span>
+            </div>
           </div>
         </div>
 
+        {/* Footer */}
         <div
           style={{
+            display: "flex",
             color: "#1A1A1A",
-            opacity: 0.4,
+            opacity: 0.35,
             fontSize: 16,
             fontFamily: "monospace",
             letterSpacing: "0.1em",
