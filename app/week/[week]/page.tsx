@@ -2,6 +2,29 @@ import { curriculum } from "@/data/curriculum";
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import TaskCard from "@/components/TaskCard";
+import type { Metadata } from "next";
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ week: string }>;
+}): Promise<Metadata> {
+  const { week: weekParam } = await params;
+  const week = curriculum.find((item) => item.week === Number(weekParam));
+
+  if (!week) return {};
+
+  return {
+    title: `Week ${week.week}: ${week.theme}`,
+    description: week.goal,
+    alternates: { canonical: `/week/${week.week}` },
+    openGraph: {
+      title: `Week ${week.week}: ${week.theme} | Growth in Practice`,
+      description: week.goal,
+      url: `/week/${week.week}`,
+    },
+  };
+}
 
 export function generateStaticParams() {
   return curriculum.map((w) => ({ week: w.week.toString() }));
@@ -22,7 +45,7 @@ export default async function WeekPage({
   const nextWeek = curriculum.find((w) => w.week === weekNum + 1);
 
   return (
-    <div className="px-6 md:px-12 py-12 md:py-16 max-w-4xl">
+    <div className="px-5 sm:px-6 md:px-8 xl:px-12 pt-20 pb-12 md:py-16 max-w-4xl">
       <p className="font-mono text-xs text-terracotta tracking-[0.2em] uppercase mb-2">
         Week {week.week.toString().padStart(2, "0")} · Days {week.days[0].day}–{week.days[week.days.length - 1].day}
       </p>
@@ -37,7 +60,7 @@ export default async function WeekPage({
       <div className="space-y-10">
         {week.days.map((day) => (
           <section key={day.day} id={`day-${day.day}`} className="scroll-mt-20">
-            <div className="flex items-baseline gap-3 mb-4">
+            <div className="flex flex-col sm:flex-row sm:items-baseline gap-1 sm:gap-3 mb-4">
               <span className="font-mono text-sm text-forest font-medium">
                 DAY {day.day.toString().padStart(2, "0")}
               </span>
@@ -52,7 +75,7 @@ export default async function WeekPage({
         ))}
       </div>
 
-      <nav className="flex items-center justify-between mt-12 pt-6 border-t border-line">
+      <nav className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mt-12 pt-6 border-t border-line">
         {prevWeek ? (
           <Link href={`/week/${prevWeek.week}`} className="font-display font-medium text-forest hover:underline">
             ← Week {prevWeek.week}: {prevWeek.theme}

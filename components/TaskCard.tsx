@@ -18,6 +18,15 @@ export default function TaskCard({ task }: { task: Task }) {
   const done = !!progress.completedTasks[task.id];
   const meta = typeLabels[task.type];
   const isChallenge = task.type === "challenge";
+  const completionDate = progress.completedTasks[task.id];
+  const formattedCompletionDate = completionDate
+    ? new Intl.DateTimeFormat("en-US", {
+        month: "short",
+        day: "numeric",
+        year: "numeric",
+        timeZone: "UTC",
+      }).format(new Date(completionDate))
+    : null;
 
   const handleToggle = async () => {
     await toggle(task.id);
@@ -29,11 +38,11 @@ export default function TaskCard({ task }: { task: Task }) {
 
   return (
     <div
-      className={`border rounded-lg p-5 transition-colors ${
+      className={`border rounded-lg p-4 sm:p-5 transition-colors ${
         done
-          ? "border-forest bg-forest/5"
+          ? "border-forest bg-card"
           : isChallenge
-            ? "border-terracotta/40 bg-terracotta/5"
+            ? "border-terracotta bg-card"
             : "border-line bg-card"
       }`}
     >
@@ -57,13 +66,18 @@ export default function TaskCard({ task }: { task: Task }) {
         )}
 
         <div className="flex-1 min-w-0">
-          <div className="flex items-center gap-2 mb-1">
+          <div className="flex flex-wrap items-center gap-2 mb-1">
             <span className={`font-mono text-[0.65rem] uppercase tracking-wider ${meta.color}`}>
               {meta.label}
             </span>
             {done && (
               <span className={`stamp ${justCompleted ? "stamp-animate" : ""}`}>
                 ✓ Logged
+              </span>
+            )}
+            {formattedCompletionDate && (
+              <span className="font-mono text-[0.6rem] text-ink/60">
+                {formattedCompletionDate}
               </span>
             )}
           </div>

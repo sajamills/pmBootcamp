@@ -359,7 +359,7 @@ Daily post drafts for the PM Bootcamp. Tweak before posting — fill in [app], [
 
 ## Advanced Challenges (AI-Native PM Track)
 
-10 new "Advanced Challenge" tasks were added (one per week), each pushing into AI-native PM skills (LLM PRDs, eval frameworks, AI UX audits, etc.). No post drafts were written for these — write your own based on what you actually discover, since these will likely produce your most differentiated LinkedIn content (e.g. "Most PMs haven't built an eval framework for AI features. Here's how I'd structure one based on what I shipped at mySet...").
+10 new "Advanced Challenge" tasks were added (one per week), each pushing into AI-native PM skills (LLM PRDs, eval frameworks, AI UX audits, etc.). No post drafts were written for these — write your own based on what you actually discover, since these will likely produce your most differentiated LinkedIn content (e.g. "Most PMs haven't built an eval framework for AI features. Here's how I'd structure one...").
 
 Suggested angle for each:
 - W1: Your AI-native PM thesis — good as a "here's my pivot" post

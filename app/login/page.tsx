@@ -28,7 +28,7 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="px-6 md:px-12 py-12 md:py-16 max-w-md">
+    <div className="px-5 sm:px-6 md:px-8 xl:px-12 pt-20 pb-12 md:py-16 max-w-md">
       <p className="font-mono text-xs text-terracotta tracking-[0.2em] uppercase mb-3">
         Owner access
       </p>

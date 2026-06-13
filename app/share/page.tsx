@@ -26,9 +26,9 @@ export default async function SharePage() {
   const linkedCount = deliverables.filter((d) => d.link).length;
 
   return (
-    <div className="px-6 md:px-12 py-12 md:py-16 max-w-3xl">
+    <div className="px-5 sm:px-6 md:px-8 xl:px-12 pt-20 pb-12 md:py-16 max-w-3xl">
       <p className="font-mono text-xs text-terracotta tracking-[0.2em] uppercase mb-3">
-        PM Field Log · Public Portfolio
+        Growth in Practice · Public Portfolio
       </p>
       <h1 className="font-display text-3xl md:text-5xl font-bold tracking-tight mb-4 leading-tight">
         10 weeks. 50 days.
@@ -36,9 +36,8 @@ export default async function SharePage() {
         <span className="text-forest">One PM portfolio.</span>
       </h1>
       <p className="text-lg text-ink/80 leading-relaxed mb-8 max-w-xl">
-        A self-directed bootcamp in Consumer &amp; Growth product management —
-        research, product sense, design audits, metrics, and roadmapping,
-        documented publicly.
+        Real product thinking about consumer growth, experimentation, and
+        AI-native products — built and published in public.
       </p>
 
       {/* Progress stats */}
@@ -77,7 +76,7 @@ export default async function SharePage() {
 
       {/* Progress bar */}
       <div className="mb-10">
-        <div className="flex justify-between font-mono text-xs text-ink/50 mb-1.5">
+        <div className="flex justify-between font-mono text-xs text-ink/60 mb-1.5">
           <span>Progress</span>
           <span>
             {completedCount} / {totalTasks} tasks
@@ -90,7 +89,7 @@ export default async function SharePage() {
           />
         </div>
         {pace && (
-          <p className="font-mono text-xs text-ink/40 mt-1.5">
+          <p className="font-mono text-xs text-ink/60 mt-1.5">
             ~{pace.tasksPerDay} tasks/day · ~{pace.weeksLeft} weeks remaining
           </p>
         )}
@@ -104,8 +103,8 @@ export default async function SharePage() {
         {deliverables.map(({ week, link, done }) => (
           <div
             key={week.week}
-            className={`border rounded-lg p-4 flex items-center justify-between gap-4 ${
-              done ? "border-forest bg-forest/5" : "border-line bg-card"
+            className={`border rounded-lg p-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 sm:gap-4 ${
+              done ? "border-forest bg-card" : "border-line bg-card"
             }`}
           >
             <div className="min-w-0">
@@ -127,11 +126,11 @@ export default async function SharePage() {
                   View ↗
                 </a>
               ) : done ? (
-                <span className="font-mono text-xs text-forest/60">
+                <span className="font-mono text-xs text-forest">
                   ✓ Done
                 </span>
               ) : (
-                <span className="font-mono text-xs text-ink/30">
+                <span className="font-mono text-xs text-ink/60">
                   In progress
                 </span>
               )}
@@ -144,15 +143,16 @@ export default async function SharePage() {
       <div className="border-t border-line pt-8">
         <h2 className="font-display font-semibold text-xl mb-3">About</h2>
         <p className="text-ink/80 leading-relaxed mb-3">
-          7+ years building and running a consumer marketplace — owning
-          upper-funnel discovery, running A/B experiments, and shipping an
-          LLM-powered conversational assistant. After 300+ PM applications with
-          zero interviews, I built this bootcamp instead: public proof of how I
-          think, with an AI-native lens baked into every week.
+          I&apos;m a former founder with 7+ years building and running a
+          consumer marketplace — owning upper-funnel discovery, growth
+          experiments, strategy, and execution. I&apos;m now translating that
+          end-to-end ownership into an industry product role.
         </p>
         <p className="text-ink/80 leading-relaxed">
-          Every week pairs core PM fundamentals with an advanced challenge
-          connecting classic skills to AI-native product management.
+          Growth in Practice makes that transferability visible. Every week
+          pairs core PM fundamentals with a portfolio deliverable and an
+          advanced challenge connecting classic skills to AI-native product
+          management.
         </p>
       </div>
     </div>

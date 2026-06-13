@@ -150,7 +150,7 @@ export const curriculum: Week[] = [
             title: "Advanced Challenge: Define your AI-native PM thesis",
             type: "challenge",
             description:
-              "You've already shipped LLM-powered conversational features (mySet's Claude-based discovery assistant). Write a half-page thesis: what does 'AI-native product management' mean beyond 'add a chatbot'? Cover at least: how AI changes the discovery/activation funnel (not just adds a feature), what new metrics matter for AI features (e.g. task completion rate, trust/accuracy, fallback-to-human rate), and one example from your own experience where AI changed user behavior in a measurable way. This becomes the opening framing for your portfolio.",
+              "Write a half-page thesis: what does 'AI-native product management' mean beyond 'add a chatbot'? Cover at least: how AI changes the discovery/activation funnel (not just adds a feature), what new metrics matter for AI features (e.g. task completion rate, trust/accuracy, fallback-to-human rate), and one example of an AI product that changed user behavior in a measurable way. This becomes the opening framing for your portfolio.",
           },
         ],
       },
@@ -298,7 +298,7 @@ export const curriculum: Week[] = [
             title: "Lesson: What's different about an LLM-feature PRD",
             type: "lesson",
             description:
-              "A PRD for an AI-powered feature needs everything a normal PRD has, plus three things traditional PRDs don't cover. First, a behavior spec for the non-deterministic parts — since outputs vary, define the boundaries of acceptable responses (tone, length, what it should never say) rather than exact outputs. Second, an evaluation plan — how will you measure quality before and after launch (golden test sets, human eval rubrics, automated checks for hallucination/refusals)? Third, a fallback/escalation design — what happens when the model is wrong, unsure, or the user is frustrated (hand off to search, human support, or a simpler deterministic flow)? You've built this in practice with mySet's Claude-based discovery assistant — this lesson formalizes that into a repeatable PRD structure.",
+              "A PRD for an AI-powered feature needs everything a normal PRD has, plus three things traditional PRDs don't cover. First, a behavior spec for the non-deterministic parts — since outputs vary, define the boundaries of acceptable responses (tone, length, what it should never say) rather than exact outputs. Second, an evaluation plan — how will you measure quality before and after launch (golden test sets, human eval rubrics, automated checks for hallucination/refusals)? Third, a fallback/escalation design — what happens when the model is wrong, unsure, or the user is frustrated (hand off to search, human support, or a simpler deterministic flow)? This lesson turns those requirements into a repeatable PRD structure.",
             resources: [
               { label: "Anthropic — Building Effective AI Agents", url: "https://www.anthropic.com/research/building-effective-agents" },
               { label: "Eugene Yan — Evaluating LLM Applications", url: "https://eugeneyan.com/writing/llm-patterns/" },
@@ -381,7 +381,7 @@ export const curriculum: Week[] = [
             title: "Advanced Challenge: Write a second PRD for an AI-powered feature",
             type: "challenge",
             description:
-              "Write a second, shorter PRD (can be 1 page) for an AI-powered version of your feature idea — e.g. instead of a static filter/search UI, a conversational assistant that helps users find what they need. Include the three LLM-specific sections from Day 11: behavior boundaries (what it should/shouldn't do), an evaluation plan (how would you build a golden test set of 10-15 example queries with expected good/bad responses?), and a fallback design. Draw directly on what you built at mySet — this PRD should feel like it's informed by real shipping experience, not theory.",
+              "Write a second, shorter PRD (can be 1 page) for an AI-powered version of your feature idea — e.g. instead of a static filter/search UI, a conversational assistant that helps users find what they need. Include the three LLM-specific sections from Day 11: behavior boundaries (what it should/shouldn't do), an evaluation plan (how would you build a golden test set of 10-15 example queries with expected good/bad responses?), and a fallback design. Ground the PRD in real user needs and operational constraints so it feels practical, not theoretical.",
           },
         ],
       },
@@ -608,7 +608,7 @@ export const curriculum: Week[] = [
             title: "Advanced Challenge: Design an AI feature scorecard",
             type: "challenge",
             description:
-              "Add a section to your metrics framework specifically for AI features: define a scorecard with (1) quality metrics — e.g. task completion rate, response relevance (could be human-rated 1-5 on a sample), hallucination/error rate on a golden test set; (2) trust metrics — e.g. % of users who edit/reject AI suggestions, fallback-to-manual rate; (3) business metrics — does the AI feature move your north star (e.g. conversion, time-to-value)? Most teams only track #3 — having a framework for all three is a differentiator. Reference how you'd have measured this for mySet's AI discovery assistant.",
+              "Add a section to your metrics framework specifically for AI features: define a scorecard with (1) quality metrics — e.g. task completion rate, response relevance (could be human-rated 1-5 on a sample), hallucination/error rate on a golden test set; (2) trust metrics — e.g. % of users who edit/reject AI suggestions, fallback-to-manual rate; (3) business metrics — does the AI feature move your north star (e.g. conversion, time-to-value)? Most teams only track #3 — having a framework for all three is a differentiator. Apply the scorecard to a real AI product as an example.",
             resources: [
               { label: "Hamel Husain — Evals are All You Need", url: "https://hamel.dev/blog/posts/evals/" },
             ],
@@ -1071,7 +1071,7 @@ export const curriculum: Week[] = [
             title: "Advanced Challenge: Answer an 'AI feature design' interview question",
             type: "challenge",
             description:
-              "Write a third case study answering a question like 'Design an AI-powered feature for [a consumer marketplace]' using CIRCLES — but go further than most candidates by explicitly addressing: when should the AI act autonomously vs. ask for confirmation (the 'agency' question)? How do you prevent the AI from being confidently wrong in ways that erode trust? What's your 'walk before run' plan for rolling this out? This question type is increasingly common in AI-PM interviews, and your mySet experience gives you a real example to draw from — use it.",
+              "Write a third case study answering a question like 'Design an AI-powered feature for [a consumer marketplace]' using CIRCLES — but go further than most candidates by explicitly addressing: when should the AI act autonomously vs. ask for confirmation (the 'agency' question)? How do you prevent the AI from being confidently wrong in ways that erode trust? What's your 'walk before run' plan for rolling this out? Ground the case study in realistic marketplace behavior and operational constraints.",
           },
         ],
       },
@@ -1178,7 +1178,7 @@ export const curriculum: Week[] = [
             title: "Advanced Challenge: Write your AI-native PM positioning statement",
             type: "challenge",
             description:
-              "Write a tight 'who I am' positioning statement (3-4 sentences, usable in your LinkedIn headline/about, portfolio intro, and outreach messages) that connects your 7 years of consumer marketplace experience to AI-native product management. Don't just list tools (Claude, Cursor) — articulate the thesis: you've already shipped LLM-powered conversational features that moved real funnel metrics, and this bootcamp is you formalizing and extending that into a repeatable AI-PM skillset (evaluation frameworks, AI UX patterns, AI-aware roadmapping). This statement is your answer to 'why should we consider you for an AI-focused PM role' — make it concrete, not buzzword-driven.",
+              "Write a tight 'who I am' positioning statement (3-4 sentences, usable in your LinkedIn headline/about, portfolio intro, and outreach messages) that connects your 7 years of consumer marketplace experience to AI-native product management. Don't just list tools (Claude, Cursor) — articulate a clear thesis about how your marketplace experience informs your approach to AI product work, and how this series is extending that into a repeatable skillset (evaluation frameworks, AI UX patterns, AI-aware roadmapping). This statement is your answer to 'why should we consider you for an AI-focused PM role' — make it concrete, not buzzword-driven.",
           },
         ],
       },

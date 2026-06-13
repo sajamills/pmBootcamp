@@ -1,6 +1,7 @@
 import { ImageResponse } from "next/og";
 import { getProgressFromKV } from "@/lib/kv";
 import { totalTasks } from "@/data/curriculum";
+import { siteUrl } from "@/lib/site";
 
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
@@ -35,17 +36,17 @@ export default async function Image() {
             fontFamily: "monospace",
           }}
         >
-          PM FIELD LOG · 10-WEEK CONSUMER / GROWTH BOOTCAMP
+          GROWTH IN PRACTICE · CONSUMER GROWTH / AI / PRODUCT
         </div>
 
         {/* Headline + progress */}
         <div style={{ display: "flex", flexDirection: "column", gap: 32 }}>
           <div style={{ display: "flex", flexDirection: "column", gap: 4 }}>
             <div style={{ display: "flex", fontSize: 72, fontWeight: "bold", color: "#1A1A1A", lineHeight: 1.05 }}>
-              10 weeks. 50 days.
+              Real product thinking.
             </div>
             <div style={{ display: "flex", fontSize: 72, fontWeight: "bold", color: "#2D5F4F", lineHeight: 1.05 }}>
-              One PM portfolio.
+              Built in public.
             </div>
           </div>
 
@@ -106,7 +107,7 @@ export default async function Image() {
             letterSpacing: "0.1em",
           }}
         >
-          pm-bootcamp-mu.vercel.app
+          {new URL(siteUrl).host}
         </div>
       </div>
     ),

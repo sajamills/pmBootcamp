@@ -5,6 +5,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { curriculum, totalTasks } from "@/data/curriculum";
 import { useProgress } from "@/contexts/ProgressContext";
+import ThemeToggle from "@/components/ThemeToggle";
 
 export default function Sidebar() {
   const pathname = usePathname();
@@ -19,33 +20,33 @@ export default function Sidebar() {
       {/* Mobile toggle */}
       <button
         onClick={() => setOpen(!open)}
-        className="md:hidden fixed top-4 left-4 z-50 bg-ink text-paper rounded px-3 py-2 font-mono text-xs tracking-widest"
+        className="lg:hidden fixed top-4 left-4 z-50 bg-ink text-paper rounded px-3 py-2 font-mono text-xs tracking-widest"
         aria-label="Toggle navigation"
         aria-expanded={open}
       >
-        {open ? "CLOSE" : "LOG"}
+        {open ? "CLOSE" : "MENU"}
       </button>
 
       <aside
         className={`
-          fixed md:sticky top-0 h-screen w-72 shrink-0 bg-card border-r border-line
+          fixed lg:sticky top-0 h-screen w-72 shrink-0 bg-card border-r border-line
           flex flex-col z-40 transition-transform duration-200
-          ${open ? "translate-x-0" : "-translate-x-full"} md:translate-x-0
+          ${open ? "translate-x-0" : "-translate-x-full"} lg:translate-x-0
         `}
       >
         <div className="p-6 border-b border-line">
           <Link href="/" className="block" onClick={() => setOpen(false)}>
             <h1 className="font-display font-bold text-xl tracking-tight leading-tight">
-              PM Field Log
+              Growth in Practice
             </h1>
             <p className="font-mono text-[0.65rem] text-forest mt-1 tracking-wider uppercase">
-              10-Week Consumer / Growth Bootcamp
+              Consumer Growth · AI · Product
             </p>
           </Link>
 
           <div className="mt-4">
             <div className="flex justify-between font-mono text-[0.65rem] text-ink/60 mb-1">
-              <span>PROGRESS</span>
+              <span>{isOwner ? "YOUR PROGRESS" : "MY PROGRESS"}</span>
               <span>{completedCount}/{totalTasks} ({pct}%)</span>
             </div>
             <div className="h-2 bg-paper rounded-full overflow-hidden border border-line">
@@ -99,7 +100,7 @@ export default function Sidebar() {
                   }`}
                 >
                   <span className="flex items-center gap-2">
-                    <span className="font-mono text-xs opacity-60">W{week.week}</span>
+                    <span className="font-mono text-xs">W{week.week}</span>
                     {week.theme}
                   </span>
                   {weekComplete && <span aria-hidden="true">✓</span>}
@@ -112,14 +113,15 @@ export default function Sidebar() {
           })}
         </nav>
 
-        <div className="p-4 border-t border-line">
+        <div className="p-4 border-t border-line space-y-3">
+          <ThemeToggle />
           {isOwner ? (
             <button
               onClick={async () => {
                 await fetch("/api/login", { method: "DELETE" });
                 window.location.reload();
               }}
-              className="font-mono text-[0.6rem] text-ink/40 hover:text-terracotta transition-colors"
+              className="font-mono text-[0.6rem] text-ink/60 hover:text-terracotta transition-colors"
             >
               Sign out
             </button>
@@ -127,9 +129,9 @@ export default function Sidebar() {
             <Link
               href="/login"
               onClick={() => setOpen(false)}
-              className="font-mono text-[0.6rem] text-ink/40 hover:text-forest transition-colors"
+              className="font-mono text-[0.6rem] text-ink/60 hover:text-forest transition-colors"
             >
-              Owner sign in
+              Admin
             </Link>
           )}
         </div>
@@ -138,7 +140,7 @@ export default function Sidebar() {
       {/* Mobile overlay */}
       {open && (
         <div
-          className="fixed inset-0 bg-ink/30 z-30 md:hidden"
+          className="fixed inset-0 bg-ink/30 z-30 lg:hidden"
           onClick={() => setOpen(false)}
           aria-hidden="true"
         />

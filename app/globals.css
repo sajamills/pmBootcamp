@@ -15,22 +15,27 @@
   --font-mono: "IBM Plex Mono", monospace;
 }
 
+html.dark {
+  --color-paper: #121512;
+  --color-ink: #F2EEE4;
+  --color-card: #1C221E;
+  --color-forest: #82B8A5;
+  --color-forest-light: #A2CEBE;
+  --color-terracotta: #E18A67;
+  --color-line: #343D37;
+  color-scheme: dark;
+}
+
 html {
   scroll-behavior: smooth;
+  color-scheme: light;
 }
 
 body {
   background-color: var(--color-paper);
   color: var(--color-ink);
   font-family: var(--font-body);
-  background-image:
-    repeating-linear-gradient(
-      transparent,
-      transparent 39px,
-      var(--color-line) 39px,
-      var(--color-line) 40px
-    );
-  background-attachment: local;
+  transition: background-color 180ms ease, color 180ms ease;
 }
 
 h1, h2, h3, h4, h5, h6 {
