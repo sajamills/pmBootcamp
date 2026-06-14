@@ -179,6 +179,27 @@ export default function PortfolioPage() {
           )}
         </ul>
       </div>
+      <div className="mt-12">
+        <div className="flex items-baseline">
+          <h2 className="font-display font-semibold text-lg">Skills developed</h2>
+          <span className="font-mono text-xs text-ink/50 ml-3">across 10 weeks</span>
+        </div>
+        <div className="grid grid-cols-2 md:grid-cols-3 gap-3 mt-4">
+          {[
+            { name: "Consumer Growth", desc: "Funnel analysis, activation, retention, and conversion frameworks" },
+            { name: "User Research", desc: "Discovery, synthesis, and translating insight into product decisions" },
+            { name: "Product Strategy", desc: "Roadmap prioritisation, opportunity sizing, and stakeholder alignment" },
+            { name: "Experimentation", desc: "Hypothesis design, A/B testing, and reading results without bias" },
+            { name: "AI-Native Products", desc: "Evaluation, trust, activation, and metrics for AI-powered features" },
+            { name: "Product Communication", desc: "PRDs, specs, influence without authority, and executive narratives" },
+          ].map((skill) => (
+            <div key={skill.name} className="border border-line rounded-lg p-4 bg-card">
+              <p className="font-display font-semibold text-sm">{skill.name}</p>
+              <p className="text-xs text-ink/60 mt-1 leading-relaxed">{skill.desc}</p>
+            </div>
+          ))}
+        </div>
+      </div>
     </div>
   );
 }

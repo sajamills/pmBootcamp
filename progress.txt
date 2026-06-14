@@ -12,6 +12,14 @@
 
 ---
 
+## 2026-06-14 - US-007
+- Added 6-card PM skills grid section at the bottom of portfolio page
+- Files changed: `app/(main)/portfolio/page.tsx`, `prd.json`, `progress.txt`
+- **Learnings for future iterations:**
+  - Hardcoded skill card data inlined as array in JSX — no separate data file needed for small static lists
+  - Skills section placed at very end of page wrapper div, after the publishing tips section
+---
+
 ## 2026-06-14 - US-006
 - Changed "How to manage" section heading to "How it works" (unconditional)
 - Rewrote owner bullet list to polished 3-bullet copy with /admin Link
