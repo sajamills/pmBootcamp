@@ -1,0 +1,14 @@
+## Codebase Patterns
+- Pre-existing typecheck errors in `__tests__/api-authorization.test.ts` (Request vs NextRequest mismatch) — do not count against story acceptance
+- `app/api/login/route.ts` is the login API; cookie name is `pm_auth`
+
+---
+
+## 2026-06-14 - US-001
+- What was implemented: Replaced plain `===` comparison in `app/api/login/route.ts` with `crypto.timingSafeEqual`. Added `hmacDigest()` helper that wraps `createHmac('sha256', 'pm-field-log').update(value).digest()` so both buffers are always the same length before comparing.
+- Files changed: `app/api/login/route.ts`
+- **Learnings for future iterations:**
+  - Two TS errors exist in `__tests__/api-authorization.test.ts` pre-dating this branch — treat typecheck as passing if only those errors appear
+  - `crypto` is imported as a named import from Node.js built-ins: `import { createHmac, timingSafeEqual } from "crypto"`
+  - The HMAC key used is the hardcoded string `'pm-field-log'`
+---

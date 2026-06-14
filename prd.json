@@ -1,0 +1,75 @@
+{
+  "project": "PM Field Log",
+  "branchName": "ralph/login-redesign",
+  "description": "Login page SaaS redesign + security hardening — timing-safe comparison, rate limiting, CSRF protection, and polished centered card UI",
+  "userStories": [
+    {
+      "id": "US-001",
+      "title": "Timing-safe secret comparison in login API",
+      "description": "As the site owner, I want login attempts compared using constant-time string comparison so an attacker cannot infer the secret length or value via response timing.",
+      "acceptanceCriteria": [
+        "Replace plain `===` comparison in `app/api/login/route.ts` with `crypto.timingSafeEqual`",
+        "Use `crypto.createHmac('sha256', 'pm-field-log').update(value).digest()` on both the provided secret and the stored secret before comparing, so buffers are always the same length",
+        "Import `crypto` from Node.js built-ins — no new packages",
+        "Typecheck passes"
+      ],
+      "priority": 1,
+      "passes": true,
+      "notes": ""
+    },
+    {
+      "id": "US-002",
+      "title": "Rate limit failed login attempts via KV",
+      "description": "As the site owner, I want failed login attempts rate-limited by IP so brute-force attacks are blocked automatically.",
+      "acceptanceCriteria": [
+        "On each failed attempt, call `kv.incr('ratelimit:login:{ip}')` where ip is the first value from `x-forwarded-for` header (split on comma, trim)",
+        "After incrementing, call `kv.expire('ratelimit:login:{ip}', 900)` to set 15-minute TTL",
+        "Before comparing the secret, read the counter with `kv.get('ratelimit:login:{ip}')`; if value >= 5, return 429 JSON `{ error: 'Too many attempts. Try again in 15 minutes.' }`",
+        "On successful login, call `kv.del('ratelimit:login:{ip}')` to clear the counter",
+        "Rate limit check runs before secret comparison",
+        "Typecheck passes"
+      ],
+      "priority": 2,
+      "passes": false,
+      "notes": ""
+    },
+    {
+      "id": "US-003",
+      "title": "CSRF / Origin header validation on login POST",
+      "description": "As the site owner, I want the login API to reject cross-site requests so forged POSTs from other origins cannot authenticate an attacker.",
+      "acceptanceCriteria": [
+        "In `app/api/login/route.ts`, read the `Origin` header from the incoming request",
+        "Derive the allowed origin from `process.env.NEXT_PUBLIC_SITE_URL` if set, otherwise fall back to the `Host` header prefixed with `https://`",
+        "Also allow origins ending in `.vercel.app` to support preview deployments",
+        "Also allow `http://localhost:3000` for local dev",
+        "If `Origin` header is missing or does not match any allowed origin, return 403 JSON `{ error: 'Forbidden' }`",
+        "Valid same-origin requests proceed to rate-limit check then secret comparison",
+        "Typecheck passes"
+      ],
+      "priority": 3,
+      "passes": false,
+      "notes": ""
+    },
+    {
+      "id": "US-004",
+      "title": "Redesigned login page — centered SaaS card",
+      "description": "As a visitor, I want the login page to look like a polished SaaS product so the site feels credible and professional end-to-end.",
+      "acceptanceCriteria": [
+        "Page uses a full-viewport centered layout (`min-h-screen flex items-center justify-center`) with `bg-ink/5` background — distinct from the main content area",
+        "Card is max-width 400px, uses `bg-card border border-line rounded-xl shadow-md p-8`",
+        "Card header shows site name 'Growth in Practice' in `font-display font-bold text-xl` and a subtitle 'Owner access' in `font-mono text-xs text-terracotta uppercase tracking-widest`",
+        "Password input is full-width, uses `font-mono`, has `placeholder='Enter your secret'`, focus ring is `focus:border-forest`",
+        "Submit button is full-width, `bg-forest text-paper font-display font-semibold`, disabled + shows 'Signing in…' during loading",
+        "Wrong secret error renders as `text-terracotta text-sm` inline below the input",
+        "Rate limit (429) error renders as `text-terracotta text-sm` with the message 'Too many attempts. Try again in 15 minutes.'",
+        "Network/unknown error renders as `text-terracotta text-sm` with 'Something went wrong. Please try again.'",
+        "The sidebar and main layout are NOT rendered on this page (login page has its own full-page layout)",
+        "Typecheck passes",
+        "Verify in browser using dev-browser skill"
+      ],
+      "priority": 4,
+      "passes": false,
+      "notes": ""
+    }
+  ]
+}
