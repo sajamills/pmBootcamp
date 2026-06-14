@@ -4,6 +4,15 @@
 
 ---
 
+## 2026-06-14 - US-003
+- What was implemented: Added `isOriginAllowed()` check at the top of POST handler. Derives the allowed origin from `NEXT_PUBLIC_SITE_URL` env var or the `Host` header prefixed with `https://`. Also allows `http://localhost:3000` and any origin ending in `.vercel.app`. Missing or non-matching `Origin` returns 403 `{ error: 'Forbidden' }`.
+- Files changed: `app/api/login/route.ts`
+- **Learnings for future iterations:**
+  - CSRF check runs BEFORE rate limit check (order: CSRF → rate limit → secret comparison)
+  - `request.headers.get("origin")` returns `null` for requests without Origin header
+  - `NEXT_PUBLIC_SITE_URL` is the canonical env var for the site's public URL
+---
+
 ## 2026-06-14 - US-002
 - What was implemented: Added IP-based rate limiting to the login POST. Before comparing the secret, reads `ratelimit:login:{ip}` from KV; returns 429 if >= 5. On failure, increments the counter and sets 900s TTL. On success, deletes the counter. IP extracted from first value of `x-forwarded-for` header.
 - Files changed: `app/api/login/route.ts`
