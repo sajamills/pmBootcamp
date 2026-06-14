@@ -91,6 +91,12 @@ export default function AboutPage() {
         >
           View portfolio →
         </Link>
+        <Link
+          href="/hire-me"
+          className="font-display font-semibold text-terracotta hover:underline"
+        >
+          Recruiter overview →
+        </Link>
       </div>
     </div>
   );

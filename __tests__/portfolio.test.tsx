@@ -34,5 +34,8 @@ describe("PortfolioPage", () => {
       screen.getByRole("heading", { level: 1, name: "Portfolio case studies" })
     ).toBeVisible();
     expect(screen.queryByText("Share with recruiters →")).not.toBeInTheDocument();
+    expect(
+      screen.getByRole("heading", { level: 2, name: "Building Growth in Practice" })
+    ).toBeVisible();
   });
 });

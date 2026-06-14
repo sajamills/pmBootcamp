@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { curriculum, totalTasks } from "@/data/curriculum";
@@ -15,26 +15,44 @@ export default function Sidebar() {
   const completedCount = Object.keys(progress.completedTasks).length;
   const pct = Math.round((completedCount / totalTasks) * 100);
 
+  useEffect(() => {
+    document.body.classList.toggle("mobile-menu-open", open);
+    document.body.style.overflow = open ? "hidden" : "";
+
+    const closeOnEscape = (event: KeyboardEvent) => {
+      if (event.key === "Escape") setOpen(false);
+    };
+    document.addEventListener("keydown", closeOnEscape);
+
+    return () => {
+      document.body.classList.remove("mobile-menu-open");
+      document.body.style.overflow = "";
+      document.removeEventListener("keydown", closeOnEscape);
+    };
+  }, [open]);
+
   return (
     <>
       {/* Mobile toggle */}
       <button
         onClick={() => setOpen(!open)}
         className="lg:hidden fixed top-4 left-4 z-50 bg-ink text-paper rounded px-3 py-2 font-mono text-xs tracking-widest"
-        aria-label="Toggle navigation"
+        aria-label={open ? "Close navigation" : "Open navigation"}
         aria-expanded={open}
+        aria-controls="site-navigation"
       >
         {open ? "CLOSE" : "MENU"}
       </button>
 
       <aside
+        id="site-navigation"
         className={`
-          fixed lg:sticky top-0 h-screen w-72 shrink-0 bg-card border-r border-line
+          fixed lg:sticky top-0 h-dvh w-full lg:h-screen lg:w-72 shrink-0 bg-card lg:border-r border-line
           flex flex-col z-40 transition-transform duration-200
           ${open ? "translate-x-0" : "-translate-x-full"} lg:translate-x-0
         `}
       >
-        <div className="p-6 border-b border-line">
+        <div className="px-6 pb-6 pt-20 lg:p-6 border-b border-line">
           <Link href="/" className="block" onClick={() => setOpen(false)}>
             <h1 className="font-display font-bold text-xl tracking-tight leading-tight">
               Growth in Practice
@@ -70,6 +88,18 @@ export default function Sidebar() {
           </Link>
 
           <Link
+            href="/hire-me"
+            onClick={() => setOpen(false)}
+            className={`mt-2 block text-center font-mono text-xs tracking-widest uppercase py-2 rounded border transition-colors ${
+              pathname === "/hire-me"
+                ? "bg-terracotta text-paper border-terracotta"
+                : "border-terracotta text-terracotta hover:bg-terracotta hover:text-paper"
+            }`}
+          >
+            Hire me →
+          </Link>
+
+          <Link
             href="/about"
             onClick={() => setOpen(false)}
             className={`mt-2 block text-center font-mono text-xs tracking-widest uppercase py-2 rounded border transition-colors ${
@@ -83,6 +113,21 @@ export default function Sidebar() {
         </div>
 
         <nav className="flex-1 overflow-y-auto sidebar-scroll px-3 py-4">
+          <Link
+            href="/day-0"
+            onClick={() => setOpen(false)}
+            className={`mb-3 flex items-center justify-between px-3 py-2 rounded font-display text-sm font-medium transition-colors ${
+              pathname === "/day-0"
+                ? "bg-forest text-paper"
+                : "border border-line hover:border-forest hover:bg-paper text-ink"
+            }`}
+          >
+            <span className="flex items-center gap-2">
+              <span className="font-mono text-xs">D0</span>
+              Foundation
+            </span>
+            <span aria-hidden="true">✓</span>
+          </Link>
           {curriculum.map((week) => {
             const weekTaskIds = week.days.flatMap((d) => d.tasks.map((t) => t.id));
             const weekDone = weekTaskIds.filter((id) => progress.completedTasks[id]).length;
@@ -137,14 +182,6 @@ export default function Sidebar() {
         </div>
       </aside>
 
-      {/* Mobile overlay */}
-      {open && (
-        <div
-          className="fixed inset-0 bg-ink/30 z-30 lg:hidden"
-          onClick={() => setOpen(false)}
-          aria-hidden="true"
-        />
-      )}
     </>
   );
 }

@@ -7,6 +7,7 @@ type ProgressContextValue = {
   progress: Progress;
   toggle: (taskId: string) => Promise<void>;
   setLink: (week: number, url: string) => Promise<void>;
+  refreshProgress: () => Promise<Progress>;
   isOwner: boolean;
 };
 
@@ -14,11 +15,18 @@ const ProgressContext = createContext<ProgressContextValue>({
   progress: { completedTasks: {} },
   toggle: async () => {},
   setLink: async () => {},
+  refreshProgress: async () => ({ completedTasks: {} }),
   isOwner: false,
 });
 
 export function ProgressProvider({ children }: { children: ReactNode }) {
   const [progress, setProgress] = useState<Progress>({ completedTasks: {} });
+
+  const refreshProgress = useCallback(async () => {
+    const updated = await getProgress();
+    setProgress(updated);
+    return updated;
+  }, []);
 
   useEffect(() => {
     getProgress().then(setProgress);
@@ -45,7 +53,15 @@ export function ProgressProvider({ children }: { children: ReactNode }) {
   }, []);
 
   return (
-    <ProgressContext.Provider value={{ progress, toggle, setLink, isOwner: !!progress.isOwner }}>
+    <ProgressContext.Provider
+      value={{
+        progress,
+        toggle,
+        setLink,
+        refreshProgress,
+        isOwner: !!progress.isOwner,
+      }}
+    >
       {children}
     </ProgressContext.Provider>
   );

@@ -2,12 +2,14 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { useProgress } from "@/contexts/ProgressContext";
 
 export default function LoginPage() {
   const [secret, setSecret] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const router = useRouter();
+  const { refreshProgress } = useProgress();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -20,8 +22,8 @@ export default function LoginPage() {
     });
     setLoading(false);
     if (res.ok) {
-      router.push("/");
-      router.refresh();
+      await refreshProgress();
+      router.replace("/");
     } else {
       setError("Wrong secret.");
     }

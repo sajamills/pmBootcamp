@@ -2,8 +2,17 @@
 
 import Link from "next/link";
 import { curriculum, totalDays, totalTasks } from "@/data/curriculum";
+import { dayZero } from "@/data/day-zero";
 import { useProgress } from "@/contexts/ProgressContext";
 import { calculateStreak, calculatePace } from "@/lib/stats";
+import GrowthSystemLoader from "@/components/GrowthSystemLoader";
+
+const weekTaskIds = Object.fromEntries(
+  curriculum.map((week) => [
+    week.week,
+    week.days.flatMap((day) => day.tasks.map((task) => task.id)),
+  ])
+);
 
 export default function Home() {
   const { progress, isOwner } = useProgress();
@@ -28,50 +37,56 @@ export default function Home() {
   }
 
   return (
-    <div className="px-5 sm:px-6 md:px-8 xl:px-12 pt-20 pb-12 md:py-16 max-w-4xl">
+    <div className="px-5 sm:px-6 md:px-8 xl:px-12 pt-20 pb-12 md:py-16 max-w-7xl">
       {/* Hero */}
-      <div className="mb-10">
-        <p className="font-mono text-xs text-terracotta tracking-[0.2em] uppercase mb-3">
-          Growth in Practice · Building in public
-        </p>
-        <h1 className="font-display text-4xl md:text-6xl font-bold tracking-tight leading-[1.05] mb-4">
-          Real product thinking.
-          <br />
-          <span className="text-forest">Built in public.</span>
-        </h1>
-        <p className="text-lg md:text-xl text-ink/80 max-w-xl leading-relaxed">
-          Practical analysis of consumer growth, experimentation, and AI-native
-          products — grounded in real operating experience.
-        </p>
-        <p className="text-sm text-ink/60 max-w-xl mt-3 leading-relaxed">
-          I&apos;m a former marketplace founder translating 7+ years of
-          end-to-end ownership into the language and evidence industry product
-          teams recognize. The current series documents that work in public.
-        </p>
-        <div className="flex flex-wrap gap-3 mt-6">
-          <Link
-            href="/portfolio"
-            className="inline-flex items-center gap-1.5 px-4 py-2 rounded-md bg-forest text-paper font-display font-semibold text-sm hover:bg-forest/90 transition-colors"
-          >
-            See my latest work →
-          </Link>
-          <Link
-            href="#roadmap"
-            className="inline-flex items-center gap-1.5 px-4 py-2 rounded-md border border-line text-ink/70 font-display font-semibold text-sm hover:border-forest hover:text-forest transition-colors"
-          >
-            Explore the current series ↓
-          </Link>
-          <Link
-            href="/about"
-            className="inline-flex items-center px-2 py-2 text-ink/60 font-display font-semibold text-sm hover:text-forest transition-colors"
-          >
-            Why I built this →
-          </Link>
+      <div className="grid lg:grid-cols-[minmax(0,1.05fr)_minmax(24rem,0.95fr)] gap-8 xl:gap-12 items-stretch mb-12">
+        <div className="flex flex-col justify-center py-2">
+          <p className="font-mono text-xs text-terracotta tracking-[0.2em] uppercase mb-3">
+            Growth in Practice · Building in public
+          </p>
+          <h1 className="font-display text-4xl md:text-6xl font-bold tracking-tight leading-[1.05] mb-4">
+            Real product thinking.
+            <br />
+            <span className="text-forest">Built in public.</span>
+          </h1>
+          <p className="text-lg md:text-xl text-ink/80 max-w-xl leading-relaxed">
+            Practical analysis of consumer growth, experimentation, and AI-native
+            products — grounded in real operating experience.
+          </p>
+          <p className="text-sm text-ink/60 max-w-xl mt-3 leading-relaxed">
+            I&apos;m a former marketplace founder translating 7+ years of
+            end-to-end ownership into the language and evidence industry product
+            teams recognize. The current series documents that work in public.
+          </p>
+          <div className="flex flex-wrap gap-3 mt-6">
+            <Link
+              href="/portfolio"
+              className="inline-flex items-center gap-1.5 px-4 py-2 rounded-md bg-forest text-paper font-display font-semibold text-sm hover:bg-forest/90 transition-colors"
+            >
+              See my latest work →
+            </Link>
+            <Link
+              href="#roadmap"
+              className="inline-flex items-center gap-1.5 px-4 py-2 rounded-md border border-line text-ink/70 font-display font-semibold text-sm hover:border-forest hover:text-forest transition-colors"
+            >
+              Explore the current series ↓
+            </Link>
+            <Link
+              href="/hire-me"
+              className="inline-flex items-center px-2 py-2 text-terracotta font-display font-semibold text-sm hover:text-forest transition-colors"
+            >
+              Recruiter overview →
+            </Link>
+          </div>
         </div>
+        <GrowthSystemLoader
+          completedTasks={progress.completedTasks}
+          weekTaskIds={weekTaskIds}
+        />
       </div>
 
       {/* Visitor orientation */}
-      <section className="border border-line bg-card rounded-lg p-6 mb-8 notebook-margin pl-8">
+      <section className="border border-line bg-card rounded-lg p-6 mb-8 notebook-margin pl-8 max-w-4xl">
         <p className="font-mono text-xs text-terracotta tracking-[0.16em] uppercase mb-2">
           The current series
         </p>
@@ -99,7 +114,7 @@ export default function Home() {
       </section>
 
       {/* Progress card */}
-      <div className="bg-card border border-line rounded-lg p-6 mb-10 notebook-margin pl-8">
+      <div className="bg-card border border-line rounded-lg p-6 mb-10 notebook-margin pl-8 max-w-4xl">
         <div className="flex flex-wrap items-baseline justify-between gap-2 mb-3">
           <h2 className="font-display font-semibold text-lg">
             {isOwner ? "Your Series Progress" : "Current Series Progress"}
@@ -150,7 +165,7 @@ export default function Home() {
       </div>
 
       {/* Stats row */}
-      <div className="grid grid-cols-3 gap-2 sm:gap-4 mb-12">
+      <div className="grid grid-cols-3 gap-2 sm:gap-4 mb-12 max-w-4xl">
         <div className="border border-line rounded-lg p-3 sm:p-4 text-center">
           <p className="font-mono text-2xl font-medium text-forest">{curriculum.length}</p>
           <p className="font-mono text-[0.65rem] uppercase tracking-wider text-ink/60 mt-1">Weeks</p>
@@ -166,44 +181,63 @@ export default function Home() {
       </div>
 
       {/* Week overview */}
-      <h2 id="roadmap" className="font-display font-semibold text-2xl mb-4 scroll-mt-8">
-        Explore the current series
-      </h2>
-      <div className="space-y-3 mb-12">
-        {curriculum.map((week) => {
-          const weekTaskIds = week.days.flatMap((d) => d.tasks.map((t) => t.id));
-          const weekDone = weekTaskIds.filter((id) => progress.completedTasks[id]).length;
-
-          return (
-            <Link
-              key={week.week}
-              href={`/week/${week.week}`}
-              className="block border border-line bg-paper rounded-lg p-4 hover:border-forest hover:bg-card transition-colors group"
-            >
-              <div className="flex items-start justify-between gap-4">
-                <div>
-                  <p className="font-mono text-xs text-terracotta tracking-wider mb-1">
-                    WEEK {week.week.toString().padStart(2, "0")} · DAYS {week.days[0].day}–{week.days[week.days.length - 1].day}
-                  </p>
-                  <h3 className="font-display font-semibold text-lg group-hover:text-forest transition-colors">
-                    {week.theme}
-                  </h3>
-                  <p className="text-sm text-ink/70 mt-1">{week.goal}</p>
-                  <p className="text-xs text-ink/60 mt-2 font-mono">
-                    📦 {week.portfolioDeliverable}
-                  </p>
-                </div>
-                <span className="font-mono text-xs text-ink/60 shrink-0">
-                  {weekDone}/{weekTaskIds.length}
-                </span>
+      <div className="max-w-4xl">
+        <h2 id="roadmap" className="font-display font-semibold text-2xl mb-4 scroll-mt-8">
+          Explore the current series
+        </h2>
+        <div className="space-y-3 mb-12">
+          <Link
+            href={dayZero.href}
+            className="block border border-forest bg-card rounded-lg p-4 hover:bg-paper transition-colors group"
+          >
+            <div className="flex items-start justify-between gap-4">
+              <div>
+                <p className="font-mono text-xs text-terracotta tracking-wider mb-1">
+                  {dayZero.label} · FOUNDATION
+                </p>
+                <h3 className="font-display font-semibold text-lg group-hover:text-forest transition-colors">
+                  {dayZero.title}
+                </h3>
+                <p className="text-sm text-ink/70 mt-1">{dayZero.summary}</p>
               </div>
-            </Link>
-          );
-        })}
+              <span className="stamp shrink-0">✓ Shipped</span>
+            </div>
+          </Link>
+          {curriculum.map((week) => {
+            const weekTaskIds = week.days.flatMap((d) => d.tasks.map((t) => t.id));
+            const weekDone = weekTaskIds.filter((id) => progress.completedTasks[id]).length;
+
+            return (
+              <Link
+                key={week.week}
+                href={`/week/${week.week}`}
+                className="block border border-line bg-paper rounded-lg p-4 hover:border-forest hover:bg-card transition-colors group"
+              >
+                <div className="flex items-start justify-between gap-4">
+                  <div>
+                    <p className="font-mono text-xs text-terracotta tracking-wider mb-1">
+                      WEEK {week.week.toString().padStart(2, "0")} · DAYS {week.days[0].day}–{week.days[week.days.length - 1].day}
+                    </p>
+                    <h3 className="font-display font-semibold text-lg group-hover:text-forest transition-colors">
+                      {week.theme}
+                    </h3>
+                    <p className="text-sm text-ink/70 mt-1">{week.goal}</p>
+                    <p className="text-xs text-ink/60 mt-2 font-mono">
+                      📦 {week.portfolioDeliverable}
+                    </p>
+                  </div>
+                  <span className="font-mono text-xs text-ink/60 shrink-0">
+                    {weekDone}/{weekTaskIds.length}
+                  </span>
+                </div>
+              </Link>
+            );
+          })}
+        </div>
       </div>
 
       {/* How to use */}
-      <div className="border-t border-line pt-8">
+      <div className="border-t border-line pt-8 max-w-4xl">
         <h2 className="font-display font-semibold text-xl mb-3">
           {isOwner ? "How to manage the series" : "How to explore Growth in Practice"}
         </h2>

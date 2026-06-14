@@ -3,6 +3,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import { curriculum } from "@/data/curriculum";
+import { dayZero } from "@/data/day-zero";
 import { useProgress } from "@/contexts/ProgressContext";
 import { absoluteUrl, siteName } from "@/lib/site";
 
@@ -59,13 +60,22 @@ export default function PortfolioPage() {
     description:
       "Product case studies covering consumer growth, research, strategy, experimentation, and AI-native product work.",
     url: absoluteUrl("/portfolio"),
-    hasPart: deliverables.map(({ week, link }) => ({
-      "@type": "CreativeWork",
-      name: week.portfolioDeliverable,
-      description: week.goal,
-      url: link || absoluteUrl(`/week/${week.week}`),
-      position: week.week,
-    })),
+    hasPart: [
+      {
+        "@type": "CreativeWork",
+        name: dayZero.title,
+        description: dayZero.summary,
+        url: absoluteUrl(dayZero.href),
+        position: 0,
+      },
+      ...deliverables.map(({ week, link }) => ({
+        "@type": "CreativeWork",
+        name: week.portfolioDeliverable,
+        description: week.goal,
+        url: link || absoluteUrl(`/week/${week.week}`),
+        position: week.week,
+      })),
+    ],
   };
 
   return (
@@ -101,6 +111,29 @@ export default function PortfolioPage() {
         {completedDeliverables} / {curriculum.length} complete ·{" "}
         {linkedDeliverables} / {curriculum.length} {isOwner ? "linked" : "published"}
       </p>
+
+      <Link
+        href={dayZero.href}
+        className="group block border border-forest bg-card rounded-lg p-5 sm:p-6 mb-6 hover:bg-paper transition-colors"
+      >
+        <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4">
+          <div className="max-w-3xl">
+            <p className="font-mono text-[0.65rem] uppercase tracking-wider text-terracotta mb-1">
+              {dayZero.label} · Foundation case study
+            </p>
+            <h2 className="font-display font-semibold text-xl group-hover:text-forest transition-colors">
+              {dayZero.title}
+            </h2>
+            <p className="text-sm text-ink/70 mt-2 leading-relaxed">
+              {dayZero.summary}
+            </p>
+          </div>
+          <span className="stamp shrink-0">✓ Shipped</span>
+        </div>
+        <p className="font-display text-sm font-semibold text-forest mt-5 pt-4 border-t border-line">
+          Read the foundation case study →
+        </p>
+      </Link>
 
       <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
         {deliverables.map(({ week, done, deliverableTasks, link }) => (

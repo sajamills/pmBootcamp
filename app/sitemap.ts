@@ -3,7 +3,7 @@ import { curriculum } from "@/data/curriculum";
 import { absoluteUrl } from "@/lib/site";
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const staticRoutes = ["", "/about", "/portfolio", "/share"];
+  const staticRoutes = ["", "/about", "/day-0", "/hire-me", "/portfolio", "/share"];
   const weeklyRoutes = curriculum.map((week) => `/week/${week.week}`);
 
   return [...staticRoutes, ...weeklyRoutes].map((path) => ({

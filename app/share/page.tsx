@@ -1,4 +1,5 @@
 import { curriculum, totalTasks } from "@/data/curriculum";
+import { dayZero } from "@/data/day-zero";
 import { getProgressFromKV } from "@/lib/kv";
 import { calculateStreak, calculatePace } from "@/lib/stats";
 
@@ -100,6 +101,22 @@ export default async function SharePage() {
         Portfolio deliverables
       </h2>
       <div className="space-y-3 mb-12">
+        <a
+          href={dayZero.href}
+          className="border border-forest bg-card rounded-lg p-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 sm:gap-4 hover:bg-paper transition-colors"
+        >
+          <div className="min-w-0">
+            <p className="font-mono text-[0.6rem] text-terracotta uppercase tracking-wider mb-0.5">
+              {dayZero.label} · Foundation
+            </p>
+            <p className="font-display font-semibold text-sm leading-snug">
+              {dayZero.title}
+            </p>
+          </div>
+          <span className="font-mono text-xs text-forest shrink-0">
+            View case study →
+          </span>
+        </a>
         {deliverables.map(({ week, link, done }) => (
           <div
             key={week.week}

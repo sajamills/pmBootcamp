@@ -1,4 +1,3 @@
-@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Source+Serif+4:wght@400;600&family=IBM+Plex+Mono:wght@400;500&display=swap');
 @import "tailwindcss";
 
 @theme {
@@ -10,9 +9,9 @@
   --color-terracotta: #C75D3A;
   --color-line: #DDD6C8;
 
-  --font-display: "Space Grotesk", sans-serif;
-  --font-body: "Source Serif 4", serif;
-  --font-mono: "IBM Plex Mono", monospace;
+  --font-display: var(--font-display-family), sans-serif;
+  --font-body: var(--font-body-family), serif;
+  --font-mono: var(--font-mono-family), monospace;
 }
 
 html.dark {
@@ -112,6 +111,17 @@ h1, h2, h3, h4, h5, h6 {
 .sidebar-scroll::-webkit-scrollbar-thumb {
   background: var(--color-line);
   border-radius: 3px;
+}
+
+.growth-system-canvas canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+  touch-action: pan-y;
+}
+
+body.mobile-menu-open .mobile-theme-toggle {
+  display: none;
 }
 
 a:focus-visible,
