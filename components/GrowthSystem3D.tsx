@@ -135,6 +135,8 @@ export default function GrowthSystem3D({
     mount.appendChild(renderer.domElement);
 
     const root = new THREE.Group();
+    root.scale.setScalar(1.16);
+    root.position.y = 0.18;
     scene.add(root);
 
     const styles = getComputedStyle(document.documentElement);
@@ -326,7 +328,7 @@ export default function GrowthSystem3D({
   return (
     <section
       aria-labelledby="growth-system-title"
-      className="relative h-full min-h-[28rem] overflow-hidden rounded-xl border border-line bg-card"
+      className="relative h-[23rem] lg:h-[25rem] xl:h-[24rem] overflow-hidden rounded-xl border border-line bg-card"
     >
       <div className="absolute inset-x-0 top-0 z-10 flex items-start justify-between gap-4 p-4">
         <div>
@@ -343,19 +345,41 @@ export default function GrowthSystem3D({
         </span>
       </div>
 
+      <div
+        className="absolute right-4 top-14 z-20 flex gap-1.5"
+        aria-label="Growth system topics"
+      >
+        {nodes.map((node, index) => (
+          <button
+            key={node.id}
+            type="button"
+            onClick={() => selectNode(node.id)}
+            aria-label={`Explore ${node.label}`}
+            aria-pressed={node.id === activeId}
+            className={`grid size-6 place-items-center rounded-full border font-mono text-[0.5rem] transition-colors ${
+              node.id === activeId
+                ? "border-forest bg-forest text-paper"
+                : "border-line bg-paper/70 text-ink/60 hover:border-forest hover:text-forest"
+            }`}
+          >
+            {index + 1}
+          </button>
+        ))}
+      </div>
+
       {webglAvailable ? (
         <div ref={mountRef} aria-hidden="true" className="absolute inset-0 growth-system-canvas" />
       ) : (
         <GrowthSystemFallback nodes={nodes} />
       )}
 
-      <div className="absolute inset-x-4 bottom-4 z-10 rounded-lg border border-line bg-paper/90 p-3 backdrop-blur-sm">
-        <div className="flex items-start justify-between gap-3">
-          <div>
+      <div className="absolute inset-x-4 bottom-4 z-10 rounded-lg border border-line bg-paper/90 px-3 py-2.5 backdrop-blur-sm">
+        <div className="flex items-center justify-between gap-3">
+          <div className="min-w-0">
             <p className="font-display text-sm font-semibold text-forest">
               {activeNode.label}
             </p>
-            <p className="text-xs text-ink/70 mt-1 leading-relaxed">
+            <p className="truncate text-xs text-ink/70 mt-0.5">
               {activeNode.description}
             </p>
           </div>
@@ -365,23 +389,6 @@ export default function GrowthSystem3D({
           >
             Explore →
           </Link>
-        </div>
-        <div className="flex flex-wrap gap-1.5 mt-3" aria-label="Growth system topics">
-          {nodes.map((node) => (
-            <button
-              key={node.id}
-              type="button"
-              onClick={() => selectNode(node.id)}
-              aria-pressed={node.id === activeId}
-              className={`rounded-full border px-2 py-1 font-mono text-[0.55rem] uppercase tracking-wide transition-colors ${
-                node.id === activeId
-                  ? "border-forest bg-forest text-paper"
-                  : "border-line text-ink/65 hover:border-forest hover:text-forest"
-              }`}
-            >
-              {node.label}
-            </button>
-          ))}
         </div>
       </div>
     </section>

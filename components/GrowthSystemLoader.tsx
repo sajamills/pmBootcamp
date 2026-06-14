@@ -21,7 +21,7 @@ function FastTopicMap() {
   return (
     <section
       aria-labelledby="growth-system-title"
-      className="min-h-[24rem] lg:min-h-[30rem] rounded-xl border border-line bg-card p-4 flex flex-col"
+      className="h-auto min-h-[21rem] sm:h-[23rem] lg:h-[25rem] xl:h-[24rem] rounded-xl border border-line bg-card p-4 flex flex-col"
     >
       <div className="flex items-start justify-between gap-4">
         <div>
@@ -36,12 +36,12 @@ function FastTopicMap() {
           Tap to explore
         </span>
       </div>
-      <div className="grid grid-cols-2 gap-2 my-auto pt-8">
+      <div className="grid grid-cols-1 min-[400px]:grid-cols-2 gap-2 my-auto py-5">
         {topics.map(([label, href], index) => (
           <Link
             key={label}
             href={href}
-            className={`rounded-lg border p-3 font-display text-xs font-semibold transition-colors hover:border-forest hover:text-forest ${
+            className={`min-h-11 rounded-lg border px-3 py-2.5 font-display text-xs font-semibold transition-colors hover:border-forest hover:text-forest ${
               index === topics.length - 1
                 ? "border-forest bg-paper text-forest"
                 : "border-line bg-paper/60"

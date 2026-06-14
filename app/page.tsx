@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import { curriculum, totalDays, totalTasks } from "@/data/curriculum";
 import { dayZero } from "@/data/day-zero";
@@ -39,7 +40,7 @@ export default function Home() {
   return (
     <div className="px-5 sm:px-6 md:px-8 xl:px-12 pt-20 pb-12 md:py-16 max-w-7xl">
       {/* Hero */}
-      <div className="grid lg:grid-cols-[minmax(0,1.05fr)_minmax(24rem,0.95fr)] gap-8 xl:gap-12 items-stretch mb-12">
+      <div className="grid xl:grid-cols-[minmax(0,1.12fr)_minmax(20rem,0.88fr)] gap-8 xl:gap-10 items-center mb-10 md:mb-12 max-w-4xl">
         <div className="flex flex-col justify-center py-2">
           <p className="font-mono text-xs text-terracotta tracking-[0.2em] uppercase mb-3">
             Growth in Practice · Building in public
@@ -53,11 +54,21 @@ export default function Home() {
             Practical analysis of consumer growth, experimentation, and AI-native
             products — grounded in real operating experience.
           </p>
-          <p className="text-sm text-ink/60 max-w-xl mt-3 leading-relaxed">
-            I&apos;m a former marketplace founder translating 7+ years of
-            end-to-end ownership into the language and evidence industry product
-            teams recognize. The current series documents that work in public.
-          </p>
+          <div className="flex flex-col items-start gap-3 max-w-xl mt-4 sm:flex-row sm:items-center">
+            <Image
+              src="/sam-miller-profile.jpeg"
+              alt="Sam Miller"
+              width={64}
+              height={64}
+              priority
+              className="size-14 sm:size-16 shrink-0 rounded-full border border-line object-cover"
+            />
+            <p className="text-sm text-ink/60 leading-relaxed">
+              I&apos;m a former marketplace founder translating 7+ years of
+              end-to-end ownership into the language and evidence industry product
+              teams recognize. The current series documents that work in public.
+            </p>
+          </div>
           <div className="flex flex-wrap gap-3 mt-6">
             <Link
               href="/portfolio"
