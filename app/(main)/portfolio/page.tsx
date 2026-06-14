@@ -5,7 +5,7 @@ import { curriculum } from "@/data/curriculum";
 import { dayZero } from "@/data/day-zero";
 import { useProgress } from "@/contexts/ProgressContext";
 import { absoluteUrl, siteName } from "@/lib/site";
-
+import { weekAccent } from "@/lib/weekAccents";
 
 export default function PortfolioPage() {
   const { progress, isOwner } = useProgress();
@@ -21,8 +21,11 @@ export default function PortfolioPage() {
     return { week, done, deliverableTasks, link };
   });
 
-  const completedDeliverables = deliverables.filter((d) => d.done).length;
+  const completed = deliverables.filter((d) => d.done);
+  const upcoming = deliverables.filter((d) => !d.done);
+  const completedDeliverables = completed.length;
   const linkedDeliverables = deliverables.filter((d) => d.link).length;
+
   const portfolioJsonLd = {
     "@context": "https://schema.org",
     "@type": "CollectionPage",
@@ -73,9 +76,7 @@ export default function PortfolioPage() {
         )}
       </div>
       <p className="text-lg text-ink/80 max-w-2xl leading-relaxed mb-2">
-        {isOwner
-          ? "Every week ends with a portfolio-ready deliverable. Paste a public link for each one — that's what recruiters see on your share page."
-          : "Every week ends with a portfolio-ready deliverable. Explore the completed case studies and follow the work still in progress."}
+        Every week ends with a portfolio-ready deliverable. Explore the completed case studies and follow the work still in progress.
       </p>
       <p className="font-mono text-sm text-forest mb-10">
         {completedDeliverables} / {curriculum.length} complete ·{" "}
@@ -105,80 +106,106 @@ export default function PortfolioPage() {
         </p>
       </Link>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
-        {deliverables.map(({ week, done, deliverableTasks, link }) => (
-          <div
-            key={week.week}
-            className={`border rounded-lg p-4 sm:p-5 flex flex-col min-w-0 ${done ? "border-forest bg-card" : "border-line bg-card"}`}
-          >
-            <div className="flex flex-col gap-3 flex-1">
-              <div className="flex-1 min-w-0">
-                <p className="font-mono text-[0.65rem] uppercase tracking-wider text-terracotta mb-1">
-                  Week {week.week.toString().padStart(2, "0")}
-                </p>
-                <h2 className="font-display font-semibold text-lg">
-                  {week.portfolioDeliverable}
-                </h2>
-                <p className="text-sm text-ink/70 mt-1">From: {week.theme}</p>
-
-                {link && (
-                  <a
-                    href={link}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-flex items-center gap-1 mt-3 bg-forest text-paper font-mono text-xs px-3 py-1.5 rounded hover:bg-forest/90"
+      {/* Completed section */}
+      <div className="mb-10">
+        <div className="flex items-baseline gap-3 mb-4">
+          <h2 className="font-display font-semibold text-lg">Completed work</h2>
+          <span className="font-mono text-xs text-ink/50">
+            {completedDeliverables} of {curriculum.length} complete
+          </span>
+        </div>
+        {completed.length > 0 ? (
+          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
+            {completed.map(({ week, deliverableTasks, link }) => {
+              const accent = weekAccent(week.week);
+              return (
+                <div
+                  key={week.week}
+                  className={`border-t-[3px] ${accent.border} ${accent.bg} rounded-lg p-4 sm:p-5 flex flex-col min-w-0`}
+                >
+                  <div className="flex flex-col gap-3 flex-1">
+                    <div className="flex-1 min-w-0">
+                      <p className={`font-mono text-[0.65rem] uppercase tracking-wider ${accent.text} mb-1`}>
+                        Week {week.week.toString().padStart(2, "0")}
+                      </p>
+                      <h2 className="font-display font-semibold text-lg">
+                        {week.portfolioDeliverable}
+                      </h2>
+                      <p className="text-sm text-ink/60 mt-1">From: {week.theme}</p>
+                      {link && (
+                        <a
+                          href={link}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="inline-flex items-center gap-1 mt-3 bg-forest text-paper font-mono text-xs px-3 py-1.5 rounded hover:bg-forest/90"
+                        >
+                          View deliverable ↗
+                        </a>
+                      )}
+                    </div>
+                    <div className="shrink-0 flex">
+                      <span className="stamp">✓ Complete</span>
+                    </div>
+                  </div>
+                  <Link
+                    href={`/week/${week.week}#day-${deliverableTasks[0] ? week.days.find((d) => d.tasks.includes(deliverableTasks[0]))?.day : week.days[week.days.length - 1].day}`}
+                    className="inline-block mt-4 pt-4 border-t border-line font-display text-sm font-semibold text-forest hover:underline"
                   >
-                    View deliverable ↗
-                  </a>
-                )}
-              </div>
-              <div className="shrink-0 flex">
-                {done ? (
-                  <span className="stamp">✓ Complete</span>
-                ) : (
-                  <span className="font-mono text-[0.65rem] uppercase tracking-wider text-ink/60">
-                    Not started
-                  </span>
-                )}
-              </div>
-            </div>
-            <Link
-              href={`/week/${week.week}#day-${deliverableTasks[0] ? week.days.find((d) => d.tasks.includes(deliverableTasks[0]))?.day : week.days[week.days.length - 1].day}`}
-              className="inline-block mt-4 pt-4 border-t border-line font-display text-sm font-semibold text-forest hover:underline"
-            >
-              {isOwner
-                ? done
-                  ? "Review task →"
-                  : "Go to task →"
-                : done
-                  ? "See how it was built →"
-                  : "Explore the curriculum →"}
-            </Link>
+                    {isOwner ? "Review task →" : "See how it was built →"}
+                  </Link>
+                </div>
+              );
+            })}
           </div>
-        ))}
+        ) : (
+          <p className="text-ink/60">
+            Deliverables ship weekly — check back soon or follow the progress above.
+          </p>
+        )}
       </div>
 
-      <div className="border-t border-line pt-8 mt-10">
-        <h2 className="font-display font-semibold text-xl mb-3">
-          {isOwner ? "Publishing tips" : "How the portfolio is built"}
-        </h2>
-        <ul className="space-y-2 text-ink/80 leading-relaxed">
-          {isOwner ? (
-            <>
-              <li>Use Notion or a Google Doc per deliverable, then share the public link.</li>
-              <li>For UX audits and Figma work, embed a Figma share link or export screenshots.</li>
-              <li>Group all 10 links into one master &ldquo;Growth in Practice Portfolio&rdquo; doc to share with recruiters.</li>
-              <li>Reference these in your resume Projects section and in outreach messages (Week 10).</li>
-            </>
-          ) : (
-            <>
-              <li>Each week focuses on a different core product-management skill.</li>
-              <li>Daily lessons and exercises build toward one substantial weekly deliverable.</li>
-              <li>Completed deliverables are linked here as they are published.</li>
-            </>
-          )}
-        </ul>
+      {/* Upcoming section */}
+      <div>
+        <div className="flex items-baseline gap-3 mb-4">
+          <h2 className="font-display font-semibold text-lg">Upcoming</h2>
+          <span className="font-mono text-xs text-ink/50">
+            {upcoming.length} week{upcoming.length !== 1 ? "s" : ""} remaining
+          </span>
+        </div>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          {upcoming.map(({ week }) => {
+            const accent = weekAccent(week.week);
+            return (
+              <div
+                key={week.week}
+                className="opacity-60 bg-paper border border-line rounded-lg p-4 sm:p-5 flex flex-col min-w-0"
+              >
+                <div className="flex flex-col gap-3 flex-1">
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-center justify-between mb-1">
+                      <p className={`font-mono text-[0.65rem] uppercase tracking-wider ${accent.text}`}>
+                        Week {week.week.toString().padStart(2, "0")}
+                      </p>
+                      <span className="font-mono text-[0.6rem] uppercase tracking-wider text-ink/50 border border-line rounded px-2 py-0.5">
+                        Coming soon
+                      </span>
+                    </div>
+                    <h2 className="font-display font-semibold text-lg text-ink/50">
+                      {week.portfolioDeliverable}
+                    </h2>
+                    <p className="text-sm text-ink/40 mt-1">From: {week.theme}</p>
+                  </div>
+                </div>
+                <p className="font-mono text-xs text-ink/30 mt-4 pt-4 border-t border-line">
+                  Estimated: Week {week.week} of 10
+                </p>
+              </div>
+            );
+          })}
+        </div>
       </div>
+
+      {/* Skills section */}
       <div className="mt-12">
         <div className="flex items-baseline">
           <h2 className="font-display font-semibold text-lg">Skills developed</h2>
