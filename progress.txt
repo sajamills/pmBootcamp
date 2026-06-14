@@ -12,6 +12,15 @@
 
 ---
 
+## 2026-06-14 - US-006
+- Changed "How to manage" section heading to "How it works" (unconditional)
+- Rewrote owner bullet list to polished 3-bullet copy with /admin Link
+- Files changed: `app/(main)/page.tsx`, `prd.json`, `progress.txt`
+- **Learnings for future iterations:**
+  - Home page (`app/(main)/page.tsx`) is a client component using `useProgress()` for isOwner
+  - Link component from next/link is already imported on the home page
+---
+
 ## 2026-06-14 - US-005
 - Added `resumeUrl` env var read and conditional "Download resume" button to hire-me page CTA group
 - Files changed: `app/(main)/hire-me/page.tsx`, `prd.json`, `progress.txt`

@@ -250,14 +250,14 @@ export default function Home() {
       {/* How to use */}
       <div className="border-t border-line pt-8 max-w-4xl">
         <h2 className="font-display font-semibold text-xl mb-3">
-          {isOwner ? "How to manage the series" : "How to explore Growth in Practice"}
+          How it works
         </h2>
         <ul className="space-y-2 text-ink/80 leading-relaxed">
           {isOwner ? (
             <>
-              <li>Spend 1–2 hours working through each day&apos;s lessons and tasks.</li>
-              <li>Sign in to check off tasks and update the public progress shown here.</li>
-              <li>Add a public link when each weekly portfolio deliverable is ready.</li>
+              <li>Work through one to two days per session at your own pace — lessons build progressively within each week.</li>
+              <li>Check off tasks as you complete them. Progress syncs across devices and updates the public view automatically.</li>
+              <li>Each week ends with a portfolio deliverable. Paste the link in <Link href="/admin" className="text-forest underline">Manage links</Link> to publish it on your portfolio page.</li>
             </>
           ) : (
             <>
