@@ -170,7 +170,7 @@ export default function PortfolioPage() {
               </div>
               <div className="shrink-0 flex">
                 {done ? (
-                  <span className="stamp">✓ Logged</span>
+                  <span className="stamp">✓ Complete</span>
                 ) : (
                   <span className="font-mono text-[0.65rem] uppercase tracking-wider text-ink/60">
                     Not started

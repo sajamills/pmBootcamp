@@ -1,17 +1,18 @@
 {
   "project": "PM Field Log",
-  "branchName": "ralph/login-redesign",
-  "description": "Login page SaaS redesign + security hardening — timing-safe comparison, rate limiting, CSRF protection, and polished centered card UI",
+  "branchName": "ralph/customer-facing-polish",
+  "description": "Customer-facing polish & admin tools — move link editors to /admin page, fix sitewide copy (labels, stamps, week page), share page last-updated + empty state, resume link on hire-me, home page copy rewrite, PM skills section on portfolio",
   "userStories": [
     {
       "id": "US-001",
-      "title": "Timing-safe secret comparison in login API",
-      "description": "As the site owner, I want login attempts compared using constant-time string comparison so an attacker cannot infer the secret length or value via response timing.",
+      "title": "Sitewide copy polish",
+      "description": "As a visitor, I want every label, badge, and status text to feel like a finished product so nothing looks like a rough draft.",
       "acceptanceCriteria": [
-        "Replace plain `===` comparison in `app/api/login/route.ts` with `crypto.timingSafeEqual`",
-        "Use `crypto.createHmac('sha256', 'pm-field-log').update(value).digest()` on both the provided secret and the stored secret before comparing, so buffers are always the same length",
-        "Import `crypto` from Node.js built-ins — no new packages",
-        "Typecheck passes"
+        "In `components/Sidebar.tsx` line 67, change the visitor branch of the `isOwner` conditional from `'MY PROGRESS'` to `'SAM'S PROGRESS'`",
+        "In `app/(main)/portfolio/page.tsx`, change the stamp text from `'✓ Logged'` to `'✓ Complete'`",
+        "In `app/(main)/week/[week]/page.tsx`, replace the line `<p className=\"text-sm font-mono text-forest mb-10\">📦 Portfolio deliverable: {week.portfolioDeliverable}</p>` with `<p className=\"font-mono text-xs text-forest uppercase tracking-wider mb-10\">Portfolio deliverable · {week.portfolioDeliverable}</p>`",
+        "Typecheck passes",
+        "Verify in browser using dev-browser skill"
       ],
       "priority": 1,
       "passes": true,
@@ -19,56 +20,101 @@
     },
     {
       "id": "US-002",
-      "title": "Rate limit failed login attempts via KV",
-      "description": "As the site owner, I want failed login attempts rate-limited by IP so brute-force attacks are blocked automatically.",
+      "title": "Create /admin page with link editors",
+      "description": "As the site owner, I want a single private page where I can manage all 10 portfolio links so the public portfolio page stays clean and visitor-focused.",
       "acceptanceCriteria": [
-        "On each failed attempt, call `kv.incr('ratelimit:login:{ip}')` where ip is the first value from `x-forwarded-for` header (split on comma, trim)",
-        "After incrementing, call `kv.expire('ratelimit:login:{ip}', 900)` to set 15-minute TTL",
-        "Before comparing the secret, read the counter with `kv.get('ratelimit:login:{ip}')`; if value >= 5, return 429 JSON `{ error: 'Too many attempts. Try again in 15 minutes.' }`",
-        "On successful login, call `kv.del('ratelimit:login:{ip}')` to clear the counter",
-        "Rate limit check runs before secret comparison",
-        "Typecheck passes"
+        "Create `app/(main)/admin/page.tsx` as a client component (`'use client'`)",
+        "Import `useProgress` from `@/contexts/ProgressContext` and `curriculum` from `@/data/curriculum`",
+        "Copy the `LinkEditor` component inline at the top of the file (same implementation as in portfolio/page.tsx: controlled input, Save button appears when dirty, calls `onSave(val)` on click)",
+        "If `!isOwner`, render: heading `'Admin'`, and a paragraph `'This page is only accessible to the site owner.'` with a link back to `/`",
+        "If `isOwner`, render: a heading `'Link manager'` in `font-display font-bold text-2xl`, a subtitle `'Paste a public link for each deliverable. Links appear on the portfolio and share pages.'` in `text-ink/70 mb-8`",
+        "Below the subtitle, render `curriculum.map((week) => ...)` — each item shows: week number label in `font-mono text-xs text-terracotta uppercase tracking-wider`, deliverable title in `font-display font-semibold`, and a `<LinkEditor>` that calls `setLink(week.week, url)` on save",
+        "Each week item is separated by a border-b border-line and has py-5 padding",
+        "Page is accessible at `/admin`",
+        "Typecheck passes",
+        "Verify in browser using dev-browser skill"
       ],
       "priority": 2,
-      "passes": true,
+      "passes": false,
       "notes": ""
     },
     {
       "id": "US-003",
-      "title": "CSRF / Origin header validation on login POST",
-      "description": "As the site owner, I want the login API to reject cross-site requests so forged POSTs from other origins cannot authenticate an attacker.",
+      "title": "Remove link editor from portfolio page; add admin sidebar link",
+      "description": "As a visitor, I want the portfolio page to be fully read-only with no embedded admin tools; as the owner I want quick access to the admin page from the sidebar.",
       "acceptanceCriteria": [
-        "In `app/api/login/route.ts`, read the `Origin` header from the incoming request",
-        "Derive the allowed origin from `process.env.NEXT_PUBLIC_SITE_URL` if set, otherwise fall back to the `Host` header prefixed with `https://`",
-        "Also allow origins ending in `.vercel.app` to support preview deployments",
-        "Also allow `http://localhost:3000` for local dev",
-        "If `Origin` header is missing or does not match any allowed origin, return 403 JSON `{ error: 'Forbidden' }`",
-        "Valid same-origin requests proceed to rate-limit check then secret comparison",
-        "Typecheck passes"
+        "In `app/(main)/portfolio/page.tsx`, remove the `isOwner ? <LinkEditor> : link ? <a> : null` block from completed cards",
+        "Replace it with a single non-conditional block: if `link` is set, render an `<a href={link}>` styled `inline-flex items-center gap-1 mt-3 bg-forest text-paper font-mono text-xs px-3 py-1.5 rounded hover:bg-forest/90` with text `'View deliverable ↗'`; if no link, render nothing",
+        "Remove the `LinkEditor` function definition from `portfolio/page.tsx` since it is no longer used there",
+        "In `components/Sidebar.tsx`, add a `'Manage links →'` link pointing to `/admin` that renders only when `isOwner` is true — place it after the existing nav items, styled `block font-mono text-xs text-ink/50 hover:text-forest py-1 transition-colors`",
+        "Typecheck passes",
+        "Verify in browser using dev-browser skill"
       ],
       "priority": 3,
-      "passes": true,
+      "passes": false,
       "notes": ""
     },
     {
       "id": "US-004",
-      "title": "Redesigned login page — centered SaaS card",
-      "description": "As a visitor, I want the login page to look like a polished SaaS product so the site feels credible and professional end-to-end.",
+      "title": "Share page polish — last active date and empty state",
+      "description": "As a recruiter visiting the share page, I want to see when this portfolio was last updated and a clear message if no deliverables are published yet.",
       "acceptanceCriteria": [
-        "Page uses a full-viewport centered layout (`min-h-screen flex items-center justify-center`) with `bg-ink/5` background — distinct from the main content area",
-        "Card is max-width 400px, uses `bg-card border border-line rounded-xl shadow-md p-8`",
-        "Card header shows site name 'Growth in Practice' in `font-display font-bold text-xl` and a subtitle 'Owner access' in `font-mono text-xs text-terracotta uppercase tracking-widest`",
-        "Password input is full-width, uses `font-mono`, has `placeholder='Enter your secret'`, focus ring is `focus:border-forest`",
-        "Submit button is full-width, `bg-forest text-paper font-display font-semibold`, disabled + shows 'Signing in…' during loading",
-        "Wrong secret error renders as `text-terracotta text-sm` inline below the input",
-        "Rate limit (429) error renders as `text-terracotta text-sm` with the message 'Too many attempts. Try again in 15 minutes.'",
-        "Network/unknown error renders as `text-terracotta text-sm` with 'Something went wrong. Please try again.'",
-        "The sidebar and main layout are NOT rendered on this page (login page has its own full-page layout)",
+        "In `app/(main)/share/page.tsx`, after the `pace` variable, compute `lastUpdated`: get all values of `progress.completedTasks` (they are ISO date strings), find the most recent one with `new Date(Math.max(...dates.map(d => new Date(d).getTime())))`, format as `'Last active: June 14, 2026'` using `new Intl.DateTimeFormat('en-US', { month: 'long', day: 'numeric', year: 'numeric' }).format(date)`; if `completedTasks` has no entries, set `lastUpdated` to `null`",
+        "Below the pace line (after the progress bar section), render `{lastUpdated && <p className='font-mono text-xs text-ink/50 mt-1.5'>{lastUpdated}</p>}` — add it inside the `mb-10` progress bar div, after the existing pace line",
+        "In the deliverables list, for rows where `!done && !link`, change the label from `'In progress'` to `'Coming soon'` styled `font-mono text-xs text-ink/40`",
+        "If `linkedCount === 0`, render a callout above the deliverables list: `<p className='text-sm text-ink/60 italic mb-4'>Deliverables publish here as each weekly sprint completes. Check back or follow progress above.</p>`",
         "Typecheck passes",
         "Verify in browser using dev-browser skill"
       ],
       "priority": 4,
-      "passes": true,
+      "passes": false,
+      "notes": ""
+    },
+    {
+      "id": "US-005",
+      "title": "Resume/CV link on hire-me page",
+      "description": "As a recruiter, I want a direct link to Sam's resume so I can review it without asking.",
+      "acceptanceCriteria": [
+        "In `app/(main)/hire-me/page.tsx`, read `const resumeUrl = process.env.NEXT_PUBLIC_RESUME_URL ?? ''` at the top of the component (it is a server component so env vars are available directly)",
+        "In the CTA button group (the `flex flex-wrap gap-3 mt-6` div), add a third button after the existing two: `{resumeUrl && <a href={resumeUrl} target='_blank' rel='noopener noreferrer' className='rounded-md border border-forest text-forest px-5 py-2.5 font-display text-sm font-semibold hover:bg-forest hover:text-paper transition-colors'>Download resume</a>}`",
+        "If `NEXT_PUBLIC_RESUME_URL` is not set or is an empty string, the button does not render",
+        "Typecheck passes",
+        "Verify in browser using dev-browser skill"
+      ],
+      "priority": 5,
+      "passes": false,
+      "notes": ""
+    },
+    {
+      "id": "US-006",
+      "title": "Rewrite home page 'How to manage' section",
+      "description": "As the site owner, I want the home page 'How to manage the series' section to feel like polished product copy instead of rough internal notes.",
+      "acceptanceCriteria": [
+        "In `app/(main)/page.tsx`, change the section heading from `{isOwner ? 'How to manage the series' : 'How to explore Growth in Practice'}` to the single string `'How it works'` for both owner and visitor (remove the conditional on the heading)",
+        "Rewrite the owner bullet list (the `isOwner` branch inside the `<ul>`) to three polished lines: (1) `'Work through one to two days per session at your own pace — lessons build progressively within each week.'` (2) `'Check off tasks as you complete them. Progress syncs across devices and updates the public view automatically.'` (3) `'Each week ends with a portfolio deliverable. Paste the link in Manage links to publish it on your portfolio page.'` — wrap `'Manage links'` in a `<Link href='/admin' className='text-forest underline'>` tag",
+        "Visitor bullet list remains unchanged",
+        "Typecheck passes",
+        "Verify in browser using dev-browser skill"
+      ],
+      "priority": 6,
+      "passes": false,
+      "notes": ""
+    },
+    {
+      "id": "US-007",
+      "title": "PM skills section on portfolio page",
+      "description": "As a recruiter, I want a concise breakdown of PM skill areas covered so I can quickly assess relevance without reading each week's detail.",
+      "acceptanceCriteria": [
+        "In `app/(main)/portfolio/page.tsx`, add a new section after the upcoming cards grid (before the closing `</div>` of the page wrapper)",
+        "Section has a flex header row: heading `'Skills developed'` in `font-display font-semibold text-lg` and a span `'across 10 weeks'` in `font-mono text-xs text-ink/50 ml-3`",
+        "Below the header, render a `grid grid-cols-2 md:grid-cols-3 gap-3 mt-4` with 6 hardcoded skill cards, each `border border-line rounded-lg p-4 bg-card`",
+        "Skill card content: skill name in `font-display font-semibold text-sm` and description in `text-xs text-ink/60 mt-1 leading-relaxed`",
+        "The 6 skills: (1) 'Consumer Growth' / 'Funnel analysis, activation, retention, and conversion frameworks' (2) 'User Research' / 'Discovery, synthesis, and translating insight into product decisions' (3) 'Product Strategy' / 'Roadmap prioritisation, opportunity sizing, and stakeholder alignment' (4) 'Experimentation' / 'Hypothesis design, A/B testing, and reading results without bias' (5) 'AI-Native Products' / 'Evaluation, trust, activation, and metrics for AI-powered features' (6) 'Product Communication' / 'PRDs, specs, influence without authority, and executive narratives'",
+        "Typecheck passes",
+        "Verify in browser using dev-browser skill"
+      ],
+      "priority": 7,
+      "passes": false,
       "notes": ""
     }
   ]

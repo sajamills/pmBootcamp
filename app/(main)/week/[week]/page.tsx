@@ -53,9 +53,7 @@ export default async function WeekPage({
         {week.theme}
       </h1>
       <p className="text-lg text-ink/80 max-w-2xl leading-relaxed mb-2">{week.goal}</p>
-      <p className="text-sm font-mono text-forest mb-10">
-        📦 Portfolio deliverable: {week.portfolioDeliverable}
-      </p>
+      <p className="font-mono text-xs text-forest uppercase tracking-wider mb-10">Portfolio deliverable · {week.portfolioDeliverable}</p>
 
       <div className="space-y-10">
         {week.days.map((day) => (
