@@ -1,8 +1,6 @@
 import type { Metadata } from "next";
 import { IBM_Plex_Mono, Source_Serif_4, Space_Grotesk } from "next/font/google";
 import "./globals.css";
-import Sidebar from "@/components/Sidebar";
-import ThemeToggle from "@/components/ThemeToggle";
 import { ProgressProvider } from "@/contexts/ProgressContext";
 import { siteDescription, siteName, siteUrl } from "@/lib/site";
 
@@ -67,15 +65,7 @@ export default function RootLayout({
       <body
         className={`${displayFont.variable} ${bodyFont.variable} ${monoFont.variable} antialiased`}
       >
-        <ProgressProvider>
-          <div className="flex min-h-screen">
-            <Sidebar />
-            <main className="flex-1 min-w-0">{children}</main>
-          </div>
-          <div className="mobile-theme-toggle lg:hidden fixed top-4 right-4 z-50 w-28">
-            <ThemeToggle />
-          </div>
-        </ProgressProvider>
+        <ProgressProvider>{children}</ProgressProvider>
       </body>
     </html>
   );

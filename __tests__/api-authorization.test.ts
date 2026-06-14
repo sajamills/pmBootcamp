@@ -47,14 +47,14 @@ describe("write API authorization", () => {
   });
 
   it("rejects an incorrect login secret", async () => {
-    const response = await login(jsonRequest("/api/login", { secret: "wrong" }));
+    const response = await login(jsonRequest("/api/login", { secret: "wrong" }) as never);
     expect(response.status).toBe(401);
     expect(mocks.setCookie).not.toHaveBeenCalled();
   });
 
   it("sets an owner cookie for the correct login secret", async () => {
     const response = await login(
-      jsonRequest("/api/login", { secret: "test-secret" })
+      jsonRequest("/api/login", { secret: "test-secret" }) as never
     );
     expect(response.status).toBe(200);
     expect(mocks.setCookie).toHaveBeenCalledWith(
