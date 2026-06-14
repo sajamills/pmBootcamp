@@ -35,6 +35,7 @@ const translation = [
 ];
 
 export default function HireMePage() {
+  const resumeUrl = process.env.NEXT_PUBLIC_RESUME_URL ?? '';
   return (
     <div className="px-5 sm:px-6 md:px-8 xl:px-12 pt-20 pb-12 md:py-16 max-w-5xl">
       <p className="font-mono text-xs text-terracotta tracking-[0.2em] uppercase mb-3">
@@ -67,6 +68,16 @@ export default function HireMePage() {
             >
               Review portfolio
             </Link>
+            {resumeUrl && (
+              <a
+                href={resumeUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="rounded-md border border-forest text-forest px-5 py-2.5 font-display text-sm font-semibold hover:bg-forest hover:text-paper transition-colors"
+              >
+                Download resume
+              </a>
+            )}
           </div>
         </div>
         <aside className="border border-forest bg-card rounded-lg p-5">

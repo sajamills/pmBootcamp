@@ -12,6 +12,14 @@
 
 ---
 
+## 2026-06-14 - US-005
+- Added `resumeUrl` env var read and conditional "Download resume" button to hire-me page CTA group
+- Files changed: `app/(main)/hire-me/page.tsx`, `prd.json`, `progress.txt`
+- **Learnings for future iterations:**
+  - hire-me page is a server component — env vars read directly, no hooks needed
+  - `NEXT_PUBLIC_RESUME_URL` env var not set in .env.local; button renders only if truthy
+---
+
 ## 2026-06-14 - US-004
 - Added lastUpdated computation from completedTasks ISO date values on share page
 - Added empty state callout above deliverables list when linkedCount === 0
