@@ -12,7 +12,26 @@ function getIp(request: NextRequest): string {
   return forwarded ? forwarded.split(",")[0].trim() : "unknown";
 }
 
+function isOriginAllowed(request: NextRequest): boolean {
+  const origin = request.headers.get("origin");
+  if (!origin) return false;
+
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL;
+  const host = request.headers.get("host");
+  const allowedOrigin = siteUrl ?? (host ? `https://${host}` : null);
+
+  if (origin === "http://localhost:3000") return true;
+  if (origin.endsWith(".vercel.app")) return true;
+  if (allowedOrigin && origin === allowedOrigin) return true;
+
+  return false;
+}
+
 export async function POST(request: NextRequest) {
+  if (!isOriginAllowed(request)) {
+    return Response.json({ error: "Forbidden" }, { status: 403 });
+  }
+
   const ip = getIp(request);
   const rateLimitKey = `ratelimit:login:${ip}`;
 
