@@ -64,7 +64,7 @@ export default function Sidebar() {
 
           <div className="mt-4">
             <div className="flex justify-between font-mono text-[0.65rem] text-ink/60 mb-1">
-              <span>{isOwner ? "YOUR PROGRESS" : "SAM'S PROGRESS"}</span>
+              <span>{"SAM'S PROGRESS"}</span>
               <span>{completedCount}/{totalTasks} ({pct}%)</span>
             </div>
             <div className="h-2 bg-paper rounded-full overflow-hidden border border-line">
