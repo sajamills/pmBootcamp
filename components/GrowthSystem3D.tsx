@@ -261,12 +261,14 @@ export default function GrowthSystem3D({
       isVisible = document.visibilityState === "visible";
     };
 
-    const clock = new THREE.Clock();
-    const animate = () => {
+    const timer = new THREE.Timer();
+    timer.connect(document);
+    const animate = (timestamp: number) => {
       animationFrame = requestAnimationFrame(animate);
       if (!isVisible) return;
 
-      const elapsed = clock.getElapsedTime();
+      timer.update(timestamp);
+      const elapsed = timer.getElapsed();
       root.rotation.x += (targetRotationX - root.rotation.x) * 0.035;
       root.rotation.y +=
         (targetRotationY + (limitMotion ? 0 : elapsed * 0.035) - root.rotation.y) *
@@ -290,10 +292,11 @@ export default function GrowthSystem3D({
     renderer.domElement.addEventListener("pointerdown", handlePointerDown);
     document.addEventListener("visibilitychange", handleVisibility);
     resize();
-    animate();
+    animationFrame = requestAnimationFrame(animate);
 
     return () => {
       cancelAnimationFrame(animationFrame);
+      timer.dispose();
       observer.disconnect();
       resizeObserver.disconnect();
       document.removeEventListener("visibilitychange", handleVisibility);
