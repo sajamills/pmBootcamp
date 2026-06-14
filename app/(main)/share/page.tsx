@@ -12,6 +12,16 @@ export default async function SharePage() {
   const streak = calculateStreak(progress.completedTasks);
   const pace = calculatePace(progress, totalTasks);
 
+  const completedDates = Object.values(progress.completedTasks) as string[];
+  const lastUpdated =
+    completedDates.length > 0
+      ? `Last active: ${new Intl.DateTimeFormat("en-US", {
+          month: "long",
+          day: "numeric",
+          year: "numeric",
+        }).format(new Date(Math.max(...completedDates.map((d) => new Date(d).getTime()))))}`
+      : null;
+
   const deliverables = curriculum.map((week) => ({
     week,
     link: progress.portfolioLinks?.[String(week.week)] ?? "",
@@ -94,12 +104,20 @@ export default async function SharePage() {
             ~{pace.tasksPerDay} tasks/day · ~{pace.weeksLeft} weeks remaining
           </p>
         )}
+        {lastUpdated && (
+          <p className="font-mono text-xs text-ink/50 mt-1.5">{lastUpdated}</p>
+        )}
       </div>
 
       {/* Portfolio deliverables */}
       <h2 className="font-display font-semibold text-xl mb-4">
         Portfolio deliverables
       </h2>
+      {linkedCount === 0 && (
+        <p className="text-sm text-ink/60 italic mb-4">
+          Deliverables publish here as each weekly sprint completes. Check back or follow progress above.
+        </p>
+      )}
       <div className="space-y-3 mb-12">
         <a
           href={dayZero.href}
@@ -147,8 +165,8 @@ export default async function SharePage() {
                   ✓ Done
                 </span>
               ) : (
-                <span className="font-mono text-xs text-ink/60">
-                  In progress
+                <span className="font-mono text-xs text-ink/40">
+                  Coming soon
                 </span>
               )}
             </div>

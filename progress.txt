@@ -12,6 +12,16 @@
 
 ---
 
+## 2026-06-14 - US-004
+- Added lastUpdated computation from completedTasks ISO date values on share page
+- Added empty state callout above deliverables list when linkedCount === 0
+- Changed "In progress" label to "Coming soon" with text-ink/40 styling
+- Files changed: `app/(main)/share/page.tsx`, `prd.json`, `progress.txt`
+- **Learnings for future iterations:**
+  - `progress.completedTasks` values are ISO date strings; `Object.values(progress.completedTasks) as string[]` to type them
+  - Share page is a server component — all logic is plain JS/TS, no hooks
+---
+
 ## 2026-06-14 - US-003
 - Removed LinkEditor from portfolio page; replaced conditional link block with simple `{link && <a>}`
 - Removed `useState` import and `setLink` destructure from portfolio page (now unused)
