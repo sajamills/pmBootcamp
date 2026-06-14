@@ -156,6 +156,15 @@ export default function Sidebar() {
               </div>
             );
           })}
+          {isOwner && (
+            <Link
+              href="/admin"
+              onClick={() => setOpen(false)}
+              className="block font-mono text-xs text-ink/50 hover:text-forest py-1 transition-colors"
+            >
+              Manage links →
+            </Link>
+          )}
         </nav>
 
         <div className="p-4 border-t border-line space-y-3">

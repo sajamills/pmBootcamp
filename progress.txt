@@ -12,6 +12,16 @@
 
 ---
 
+## 2026-06-14 - US-003
+- Removed LinkEditor from portfolio page; replaced conditional link block with simple `{link && <a>}`
+- Removed `useState` import and `setLink` destructure from portfolio page (now unused)
+- Added `'Manage links →'` owner-only link at bottom of sidebar nav pointing to `/admin`
+- Files changed: `app/(main)/portfolio/page.tsx`, `components/Sidebar.tsx`, `prd.json`, `progress.txt`
+- **Learnings for future iterations:**
+  - Sidebar nav ends with `{curriculum.map(...)}` before `</nav>` — owner-only links added after that map
+  - When removing LinkEditor, also clean up `useState` import and `setLink` destructure (both become unused)
+---
+
 ## 2026-06-14 - US-002
 - Created `app/(main)/admin/page.tsx` as a client component with inline LinkEditor
 - Files changed: `app/(main)/admin/page.tsx`, `prd.json`, `progress.txt`

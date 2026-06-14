@@ -1,44 +1,14 @@
 "use client";
 
-import { useState } from "react";
 import Link from "next/link";
 import { curriculum } from "@/data/curriculum";
 import { dayZero } from "@/data/day-zero";
 import { useProgress } from "@/contexts/ProgressContext";
 import { absoluteUrl, siteName } from "@/lib/site";
 
-function LinkEditor({
-  initial,
-  onSave,
-}: {
-  initial: string;
-  onSave: (url: string) => void;
-}) {
-  const [val, setVal] = useState(initial);
-  const dirty = val !== initial;
-  return (
-    <div className="flex flex-col sm:flex-row gap-2 mt-3">
-      <input
-        type="url"
-        value={val}
-        onChange={(e) => setVal(e.target.value)}
-        placeholder="Paste link to deliverable (Notion, Google Doc, Figma…)"
-        className="w-full flex-1 text-xs font-mono border border-line rounded px-3 py-2 bg-paper focus:outline-none focus:border-forest min-w-0"
-      />
-      {dirty && (
-        <button
-          onClick={() => onSave(val)}
-          className="text-xs font-mono px-3 py-2 bg-forest text-paper rounded hover:bg-forest/90 shrink-0 transition-colors"
-        >
-          Save
-        </button>
-      )}
-    </div>
-  );
-}
 
 export default function PortfolioPage() {
-  const { progress, isOwner, setLink } = useProgress();
+  const { progress, isOwner } = useProgress();
 
   const deliverables = curriculum.map((week) => {
     const deliverableTasks = week.days
@@ -151,22 +121,16 @@ export default function PortfolioPage() {
                 </h2>
                 <p className="text-sm text-ink/70 mt-1">From: {week.theme}</p>
 
-                {/* Link display / editor */}
-                {isOwner ? (
-                  <LinkEditor
-                    initial={link}
-                    onSave={(url) => setLink(week.week, url)}
-                  />
-                ) : link ? (
+                {link && (
                   <a
                     href={link}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-flex items-center gap-1 mt-3 text-xs font-mono text-forest underline underline-offset-2 hover:opacity-70"
+                    className="inline-flex items-center gap-1 mt-3 bg-forest text-paper font-mono text-xs px-3 py-1.5 rounded hover:bg-forest/90"
                   >
                     View deliverable ↗
                   </a>
-                ) : null}
+                )}
               </div>
               <div className="shrink-0 flex">
                 {done ? (
