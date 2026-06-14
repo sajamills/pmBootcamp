@@ -58,4 +58,23 @@ describe("contact API", () => {
       })
     );
   });
+
+  it("returns a gateway error when Resend rejects the message", async () => {
+    vi.spyOn(console, "error").mockImplementation(() => undefined);
+    vi.stubGlobal(
+      "fetch",
+      vi.fn().mockResolvedValue({
+        ok: false,
+        status: 403,
+        text: vi.fn().mockResolvedValue("Sender domain is not verified"),
+      })
+    );
+
+    const response = await POST(contactRequest(validContact) as never);
+    expect(response.status).toBe(502);
+    expect(console.error).toHaveBeenCalledWith(
+      "Resend contact delivery failed",
+      expect.objectContaining({ status: 403 })
+    );
+  });
 });

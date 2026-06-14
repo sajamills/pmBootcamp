@@ -78,6 +78,11 @@ export async function POST(request: NextRequest) {
   }
 
   if (!resendResponse.ok) {
+    const providerError = await resendResponse.text();
+    console.error("Resend contact delivery failed", {
+      status: resendResponse.status,
+      error: providerError.slice(0, 500),
+    });
     return Response.json(
       { error: "The message could not be sent. Please try again shortly." },
       { status: 502 }
