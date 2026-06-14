@@ -1,7 +1,21 @@
 ## Codebase Patterns
 - Pre-existing typecheck errors in `__tests__/api-authorization.test.ts` (Request vs NextRequest mismatch) — do not count against story acceptance
 - `app/api/login/route.ts` is the login API; cookie name is `pm_auth`
+- All main pages live in `app/(main)/` route group (sidebar via `app/(main)/layout.tsx`); `app/layout.tsx` is a clean root providing only fonts + ProgressProvider
+- Login page lives at `app/login/` (outside (main)), so it gets no sidebar
+- `__tests__/portfolio.test.tsx` imports from `@/app/(main)/portfolio/page`
 
+---
+
+## 2026-06-14 - US-004
+- What was implemented: Redesigned login page as a full-viewport centered SaaS card. Migrated all main content pages into `app/(main)/` route group so `app/(main)/layout.tsx` handles the sidebar. Stripped the root `app/layout.tsx` to just fonts + ProgressProvider (no sidebar). Login page at `app/login/` automatically gets a clean full-page layout. Card is max-400px with bg-card/border/rounded-xl/shadow-md. Error handling splits 401/403 (wrong secret), 429 (rate limit message), and network errors.
+- Files changed: `app/login/page.tsx`, `app/layout.tsx`, `app/(main)/layout.tsx`, `__tests__/portfolio.test.tsx`, moved all main pages into `app/(main)/`
+- **Learnings for future iterations:**
+  - In Next.js App Router, route groups `(name)` don't affect URLs — use them to apply layouts to a subset of pages
+  - Both `app/page.tsx` and `app/(main)/page.tsx` resolve to `/` and WILL conflict — must delete old files when migrating to route group
+  - After deleting pages, clear `.next/` cache before typechecking (`rm -rf .next`) to avoid stale type errors
+  - The 2 failing tests in `api-authorization.test.ts` are caused by CSRF check returning 403 on requests without Origin — pre-existing issue
+  - Manual browser verification needed (no browser tool configured): navigate to `/login` and verify centered card, no sidebar
 ---
 
 ## 2026-06-14 - US-003
