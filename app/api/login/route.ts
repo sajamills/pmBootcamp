@@ -1,11 +1,19 @@
 import { NextRequest } from "next/server";
 import { cookies } from "next/headers";
+import { createHmac, timingSafeEqual } from "crypto";
+
+function hmacDigest(value: string): Buffer {
+  return createHmac("sha256", "pm-field-log").update(value).digest();
+}
 
 export async function POST(request: NextRequest) {
   const { secret } = await request.json();
   const writeSecret = process.env.WRITE_SECRET;
 
-  if (!writeSecret || secret !== writeSecret) {
+  if (
+    !writeSecret ||
+    !timingSafeEqual(hmacDigest(secret ?? ""), hmacDigest(writeSecret))
+  ) {
     return Response.json({ error: "Wrong secret" }, { status: 401 });
   }
 
