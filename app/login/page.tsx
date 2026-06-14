@@ -24,37 +24,45 @@ export default function LoginPage() {
     if (res.ok) {
       await refreshProgress();
       router.replace("/");
-    } else {
+    } else if (res.status === 429) {
+      setError("Too many attempts. Try again in 15 minutes.");
+    } else if (res.status === 401 || res.status === 403) {
       setError("Wrong secret.");
+    } else {
+      setError("Something went wrong. Please try again.");
     }
   };
 
   return (
-    <div className="px-5 sm:px-6 md:px-8 xl:px-12 pt-20 pb-12 md:py-16 max-w-md">
-      <p className="font-mono text-xs text-terracotta tracking-[0.2em] uppercase mb-3">
-        Owner access
-      </p>
-      <h1 className="font-display text-3xl font-bold mb-6 tracking-tight">Sign in</h1>
-      <form onSubmit={handleSubmit} className="space-y-4">
-        <input
-          type="password"
-          value={secret}
-          onChange={(e) => setSecret(e.target.value)}
-          placeholder="Enter your secret"
-          autoFocus
-          className="w-full border border-line rounded-md px-4 py-2.5 bg-paper font-mono text-sm focus:outline-none focus:border-forest"
-        />
-        {error && (
-          <p className="text-terracotta text-sm font-mono">{error}</p>
-        )}
-        <button
-          type="submit"
-          disabled={loading}
-          className="px-5 py-2.5 bg-forest text-paper font-display font-semibold rounded-md text-sm hover:bg-forest/90 transition-colors disabled:opacity-50"
-        >
-          {loading ? "Signing in…" : "Sign in →"}
-        </button>
-      </form>
+    <div className="min-h-screen flex items-center justify-center bg-ink/5">
+      <div className="w-full max-w-[400px] bg-card border border-line rounded-xl shadow-md p-8">
+        <div className="mb-6">
+          <h1 className="font-display font-bold text-xl">Growth in Practice</h1>
+          <p className="font-mono text-xs text-terracotta uppercase tracking-widest mt-1">
+            Owner access
+          </p>
+        </div>
+        <form onSubmit={handleSubmit} className="space-y-4">
+          <input
+            type="password"
+            value={secret}
+            onChange={(e) => setSecret(e.target.value)}
+            placeholder="Enter your secret"
+            autoFocus
+            className="w-full border border-line rounded-md px-4 py-2.5 bg-paper font-mono text-sm focus:outline-none focus:border-forest"
+          />
+          {error && (
+            <p className="text-terracotta text-sm">{error}</p>
+          )}
+          <button
+            type="submit"
+            disabled={loading}
+            className="w-full px-5 py-2.5 bg-forest text-paper font-display font-semibold rounded-md text-sm hover:bg-forest/90 transition-colors disabled:opacity-50"
+          >
+            {loading ? "Signing in…" : "Sign in →"}
+          </button>
+        </form>
+      </div>
     </div>
   );
 }
