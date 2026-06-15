@@ -6,6 +6,7 @@ import { dayZero } from "@/data/day-zero";
 import { useProgress } from "@/contexts/ProgressContext";
 import { absoluteUrl, siteName } from "@/lib/site";
 import { weekAccent } from "@/lib/weekAccents";
+import { stitchFixCaseStudy } from "@/data/stitchfix-case-study";
 
 export default function PortfolioPage() {
   const { progress, isOwner } = useProgress();
@@ -40,6 +41,13 @@ export default function PortfolioPage() {
         description: dayZero.summary,
         url: absoluteUrl(dayZero.href),
         position: 0,
+      },
+      {
+        "@type": "CreativeWork",
+        name: stitchFixCaseStudy.title,
+        description: stitchFixCaseStudy.summary,
+        url: absoluteUrl("/portfolio/stitchfix-onboarding"),
+        position: 1,
       },
       ...deliverables.map(({ week, link }) => ({
         "@type": "CreativeWork",
@@ -103,6 +111,41 @@ export default function PortfolioPage() {
         </div>
         <p className="font-display text-sm font-semibold text-forest mt-5 pt-4 border-t border-line">
           Read the foundation case study →
+        </p>
+      </Link>
+
+      <Link
+        href="/portfolio/stitchfix-onboarding"
+        className="group block border-t-[3px] border-terracotta bg-terracotta/5 rounded-lg p-5 sm:p-6 mb-10 hover:bg-card transition-colors"
+      >
+        <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4">
+          <div className="max-w-3xl">
+            <p className="font-mono text-[0.65rem] uppercase tracking-wider text-terracotta mb-1">
+              Shipped product case study · 20 PRD tickets
+            </p>
+            <h2 className="font-display font-semibold text-2xl group-hover:text-forest transition-colors">
+              {stitchFixCaseStudy.title}
+            </h2>
+            <p className="text-sm text-ink/70 mt-2 leading-relaxed">
+              {stitchFixCaseStudy.summary}
+            </p>
+            <div className="flex flex-wrap gap-2 mt-4">
+              {["Adaptive onboarding", "Interactive 3D avatar", "User flow"].map(
+                (item) => (
+                  <span
+                    key={item}
+                    className="rounded-full border border-line bg-paper px-3 py-1 font-mono text-[0.6rem] uppercase tracking-wide text-ink/65"
+                  >
+                    {item}
+                  </span>
+                )
+              )}
+            </div>
+          </div>
+          <span className="stamp shrink-0">✓ Shipped</span>
+        </div>
+        <p className="font-display text-sm font-semibold text-forest mt-5 pt-4 border-t border-line">
+          Read the case study and PRD ledger →
         </p>
       </Link>
 

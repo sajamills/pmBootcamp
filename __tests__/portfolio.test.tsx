@@ -1,4 +1,4 @@
-import { render, screen } from "@testing-library/react";
+import { render, screen, within } from "@testing-library/react";
 import { describe, expect, it, vi } from "vitest";
 import PortfolioPage from "@/app/(main)/portfolio/page";
 import { curriculum } from "@/data/curriculum";
@@ -20,12 +20,14 @@ vi.mock("@/contexts/ProgressContext", () => ({
 }));
 
 describe("PortfolioPage", () => {
-  it("renders every weekly case study in a responsive 1/2/3-column grid", () => {
+  it("renders every upcoming weekly case study in a responsive 1/2-column grid", () => {
     const { container } = render(<PortfolioPage />);
     const grid = container.querySelector(".grid.grid-cols-1");
 
-    expect(grid).toHaveClass("md:grid-cols-2", "xl:grid-cols-3");
-    expect(screen.getAllByText(/Week \d{2}/)).toHaveLength(curriculum.length);
+    expect(grid).toHaveClass("md:grid-cols-2");
+    expect(within(grid as HTMLElement).getAllByText(/^Week \d{2}$/)).toHaveLength(
+      curriculum.length
+    );
   });
 
   it("uses visitor-facing portfolio language", () => {
@@ -37,5 +39,16 @@ describe("PortfolioPage", () => {
     expect(
       screen.getByRole("heading", { level: 2, name: "Building Growth in Practice" })
     ).toBeVisible();
+  });
+
+  it("features the shipped StitchFix case study", () => {
+    render(<PortfolioPage />);
+
+    expect(
+      screen.getByRole("heading", { level: 2, name: "StitchFix Onboarding Reimagined" })
+    ).toBeVisible();
+    expect(
+      screen.getByRole("link", { name: /Read the case study and PRD ledger/ })
+    ).toHaveAttribute("href", "/portfolio/stitchfix-onboarding");
   });
 });
